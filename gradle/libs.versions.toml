@@ -1,0 +1,98 @@
+[versions]
+androidxActivity = "1.7.2"
+androidxComposeBom = "2023.04.01"
+androidxComposeCompiler = "1.4.5"
+androidGradlePlugin = "7.4.1"
+androidxPaging = "3.1.1"
+coil-compose = "2.2.2"
+compose-ratingBar = "1.2.4"
+compose-lifecycle-runtime = "2.6.0-alpha01"
+detekt = "1.22.0-RC2"
+kotlin_version = "1.8.20"
+koin = "3.4.2"
+koin_android_version= "3.4.0"
+ktLint = "10.3.0"
+ktorVersion = "2.3.1"
+landscapist-coil = "2.1.0"
+lifecycle-runtime = "2.6.1"
+napierVersion = "2.6.1"
+kotlinxSerialization = "1.4.1"
+kmm-paging = "3.1.1-0.1.0"
+kuurtPaging = "0.4.7"
+multiplatform-settings = "1.0.0"
+pagingCompose = "1.0.0-alpha17"
+sqlDelightVersion= "1.5.5"
+
+voyager = "1.0.0-rc05"
+
+
+
+[libraries]
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3-windowSizeClass = {group = "androidx.compose.material3", name = "material3-window-size-class" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+androidx-compose-ui-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+androidx-compose-runtime-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose",version.ref = "compose-lifecycle-runtime"}
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle-runtime"}
+
+androidx-paging-compose = {group = "androidx.paging", name  = "paging-compose" ,version.ref = "pagingCompose"}
+androidx-paging-runtime = {group = "androidx.paging", name  = "paging-runtime" ,version.ref = "androidxPaging"}
+
+cash-paging-common = { group = "app.cash.paging" ,  name = "paging-common", version.ref = "kmm-paging"}
+cash-paging-runtime = { group = "app.cash.paging" ,  name = "paging-runtime", version.ref = "kmm-paging"}
+
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose"}
+compose-ratingbar = { group  = "com.github.a914-gowtham", name = "compose-ratingbar", version.ref = "compose-ratingBar"}
+koin-core = { group = "io.insert-koin", name = "koin-core" , version.ref = "koin"}
+koin-test = { group = "io.insert-koin", name = "koin-test" , version.ref = "koin"}
+koin-android = { group = "io.insert-koin", name = "koin-android" , version.ref = "koin_android_version"}
+koin-android-compose = { group = "io.insert-koin", name = "koin-androidx-compose" , version.ref = "koin_android_version"}
+
+ktor-client-core = { group = "io.ktor" , name = "ktor-client-core" ,version.ref = "ktorVersion"}
+ktor-client-okhttp = { group = "io.ktor" , name = "ktor-client-okhttp" ,version.ref = "ktorVersion"}
+ktor-client-darwin = { group = "io.ktor" , name = "ktor-client-darwin" ,version.ref = "ktorVersion"}
+ktor-client-logging = { group = "io.ktor" , name = "ktor-client-logging" ,version.ref = "ktorVersion"}
+ktor-client-contentNegotiation = { group = "io.ktor" , name = "ktor-client-content-negotiation" ,version.ref = "ktorVersion"}
+ktor-client-json = { group = "io.ktor" , name = "ktor-serialization-kotlinx-json" ,version.ref = "ktorVersion"}
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx" ,name = "kotlinx-serialization-json",version.ref = "kotlinxSerialization"}
+sqldelight-runtime = { group = "com.squareup.sqldelight", name = "runtime", version.ref = "sqlDelightVersion"}
+sqldelight-android-driver= { group = "com.squareup.sqldelight", name = "android-driver", version.ref = "sqlDelightVersion"}
+sqldelight-native-driver= { group = "com.squareup.sqldelight", name = "native-driver", version.ref = "sqlDelightVersion"}
+landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist-coil"}
+landscapist-palette = { group = "com.github.skydoves" , name  = "landscapist-palette" , version.ref = "landscapist-coil"}
+
+
+logger-napier = { group = "io.github.aakira" , name = "napier" ,version.ref = "napierVersion"}
+multiplatform-paging = { group = "io.github.kuuuurt", name  = "multiplatform-paging" , version.ref = "kuurtPaging"}
+multiplatform-settings = { group = "com.russhwolf" , name = "multiplatform-settings" , version.ref = "multiplatform-settings"}
+multiplatform-settings-coroutines = { group = "com.russhwolf" , name = "multiplatform-settings-coroutines" , version.ref = "multiplatform-settings"}
+
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
+voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyager-androidx = { module = "cafe.adriel.voyager:voyager-androidx", version.ref = "voyager" }
+voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
+voyager-hilt = { module = "cafe.adriel.voyager:voyager-hilt", version.ref = "voyager" }
+voyager-kodein = { module = "cafe.adriel.voyager:voyager-kodein", version.ref = "voyager" }
+voyager-rxjava = { module = "cafe.adriel.voyager:voyager-rxjava", version.ref = "voyager" }
+
+
+
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+tools-detekt = { id = "io.gitlab.arturbosch.detekt",version.ref = "detekt" }
+tools-klint = {id = "org.jlleitschuh.gradle.ktlint" , version.ref = "ktLint"}

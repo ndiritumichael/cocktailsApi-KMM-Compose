@@ -1,4 +1,4 @@
-rootProject.name = "MyApplication"
+rootProject.name = "CockTails-KMM"
 
 include(":androidApp")
 include(":shared")
