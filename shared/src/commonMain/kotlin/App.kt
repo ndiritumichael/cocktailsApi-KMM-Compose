@@ -10,12 +10,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import presentation.DrinksSearchPresenter
 import screens.searchScreen.SearchScreen
 
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
+   val presenter = remember { DrinksSearchPresenter() }
     MaterialTheme {
         var greetingText by remember { mutableStateOf("Hello, World!") }
         var showImage by remember { mutableStateOf(true) }
@@ -24,7 +26,7 @@ fun App() {
             spring(dampingRatio = Spring.DampingRatioHighBouncy),
         )
 
-     SearchScreen()
+     SearchScreen(presenter)
 
 //        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 //            Button(onClick = {
