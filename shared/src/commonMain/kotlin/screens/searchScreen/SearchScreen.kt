@@ -61,7 +61,7 @@ fun SearchScreen(presenter: DrinksSearchPresenter) {
                             Box(
                                 modifier = Modifier.fillMaxSize().background(
                                     color = Color.Black,
-                                ).size(100.dp).co,
+                                ).size(100.dp),
 
                             )
                         }
