@@ -15,4 +15,14 @@ class SearchService(private val client: HttpClient) : BaseApiResponse() {
             }
         }
     }
+
+    suspend fun getDrinkDetails(id: String): Result<List<DrinkDTOItem>> {
+        return safeApiCall {
+            client.get(
+                UrlRoutes.GetCocktailByID.path,
+            ) {
+                parameter(UrlRoutes.GetCocktailByID.path, id)
+            }
+        }
+    }
 }
