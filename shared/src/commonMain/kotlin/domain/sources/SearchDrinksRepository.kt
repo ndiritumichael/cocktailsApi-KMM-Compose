@@ -19,4 +19,11 @@ class SearchDrinksRepository(private val api: SearchService) : SearchDrinksSourc
             }
         }
     }
+
+    override suspend fun getDrinkDetails(id: String): Result<DrinkModel> {
+        return api.getDrinkDetails(id).toModelResult {
+            it.first().toDrinkModel()
+
+        }
+    }
 }
