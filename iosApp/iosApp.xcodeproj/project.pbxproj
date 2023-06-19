@@ -351,7 +351,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
+				DEVELOPMENT_TEAM = 874AZT649B;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
@@ -360,6 +360,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "${BUNDLE_ID}${TEAM_ID}";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.devmike.cocktailscompose;
 				PRODUCT_NAME = "${APP_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -375,7 +376,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
+				DEVELOPMENT_TEAM = 874AZT649B;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
@@ -384,6 +385,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "${BUNDLE_ID}${TEAM_ID}";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.devmike.cocktailscompose;
 				PRODUCT_NAME = "${APP_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

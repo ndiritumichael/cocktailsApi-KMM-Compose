@@ -3,6 +3,7 @@ plugins {
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -33,13 +34,34 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                implementation(libs.voyager.navigator)
+
+                api(libs.koin.core)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.ktor.client.contentNegotiation)
+                implementation(libs.ktor.client.json)
+                implementation(libs.kotlinx.serialization.json)
+                api(libs.logger.napier)
+
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.coroutines)
             }
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.activity:activity-compose:1.6.1")
+
+                api(libs.androidx.activity.compose)
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.9.0")
+
+                implementation(libs.sqldelight.android.driver)
+                api(libs.coil.compose)
+
+                api(libs.koin.android)
+                implementation(libs.ktor.client.okhttp)
             }
         }
         val iosX64Main by getting
@@ -50,6 +72,11 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+
+            dependencies {
+                implementation(libs.sqldelight.native.driver)
+                implementation(libs.ktor.client.darwin)
+            }
         }
     }
 }
