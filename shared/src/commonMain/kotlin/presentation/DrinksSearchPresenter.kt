@@ -58,6 +58,8 @@ class DrinksSearchPresenter : KoinComponent {
         _searchText.value = search
        // searchDrinks(_searchText.value)
     }
+
+
 }
 data class SearchScreenState(
     val isLoading: Boolean = false,
