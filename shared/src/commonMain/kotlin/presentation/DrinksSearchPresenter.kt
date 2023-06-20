@@ -1,9 +1,6 @@
 package presentation
 
-import data.network.apiClient
-import data.sources.SearchService
 import domain.models.DrinkModel
-import domain.sources.SearchDrinksRepository
 import domain.sources.SearchDrinksSource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
@@ -43,25 +40,30 @@ class DrinksSearchPresenter : KoinComponent {
         _searchState.value = SearchScreenState(isLoading = true)
         job?.cancel()
         job = coroutineScope.launch {
-            delay(2000)
+            delay(500)
             val data = repository.searchDrinkByName(search)
             data.onSuccess {
                 _searchState.value = SearchScreenState(data = it)
-
             }.onFailure {
                 _searchState.value = SearchScreenState(errorMessage = it.message)
             }
         }
     }
 
-    fun changeSearchString(search: String){
+    fun changeSearchString(search: String) {
         _searchText.value = search
-       // searchDrinks(_searchText.value)
+        // searchDrinks(_searchText.value)
     }
 
-
+    fun getDrinkDetails(drinkId: String) {
+    }
 }
 data class SearchScreenState(
+    val isLoading: Boolean = false,
+    val data: List<DrinkModel> = emptyList(),
+    val errorMessage: String? = null,
+)
+data class DetailScreenState(
     val isLoading: Boolean = false,
     val data: List<DrinkModel> = emptyList(),
     val errorMessage: String? = null,
