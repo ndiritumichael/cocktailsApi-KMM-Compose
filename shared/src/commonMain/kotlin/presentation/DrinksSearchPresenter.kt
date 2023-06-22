@@ -1,5 +1,6 @@
 package presentation
 
+import domain.models.DrinkDetailModel
 import domain.models.DrinkModel
 import domain.sources.SearchDrinksSource
 import io.github.aakira.napier.Napier
@@ -19,6 +20,7 @@ class DrinksSearchPresenter : KoinComponent {
     private val repository: SearchDrinksSource by inject()
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
     private var job: Job? = null
+    private var detailJob: Job? = null
 
     private val _searchText = MutableStateFlow("")
     val searchText
@@ -30,9 +32,27 @@ class DrinksSearchPresenter : KoinComponent {
     val searchState: StateFlow<SearchScreenState>
         get() = _searchState.asStateFlow()
 
+
+    private val _drinkDetailState = MutableStateFlow(DetailScreenState())
+    val drinkDetailState
+        get() = _drinkDetailState.asStateFlow()
     init {
         Napier.e {
             "Starting the presenter......"
+        }
+    }
+
+    fun getDrinkDetails(id : String) {
+        _drinkDetailState.value = DetailScreenState(isLoading = true)
+        detailJob?.cancel()
+        detailJob = coroutineScope.launch {
+
+            val data = repository.getDrinkDetails(id)
+            data.onSuccess {
+                _drinkDetailState.value = DetailScreenState(data = it)
+            }.onFailure {
+                _drinkDetailState.value = DetailScreenState(errorMessage = it.message)
+            }
         }
     }
 
@@ -55,8 +75,7 @@ class DrinksSearchPresenter : KoinComponent {
         // searchDrinks(_searchText.value)
     }
 
-    fun getDrinkDetails(drinkId: String) {
-    }
+
 }
 data class SearchScreenState(
     val isLoading: Boolean = false,
@@ -65,6 +84,8 @@ data class SearchScreenState(
 )
 data class DetailScreenState(
     val isLoading: Boolean = false,
-    val data: List<DrinkModel> = emptyList(),
+    val data: DrinkDetailModel? = null,
     val errorMessage: String? = null,
 )
+
+
