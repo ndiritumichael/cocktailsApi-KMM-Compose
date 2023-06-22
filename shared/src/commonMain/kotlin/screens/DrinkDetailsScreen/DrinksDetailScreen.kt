@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -84,12 +83,10 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                 IconButton(
                     { navigator.pop() },
                     modifier = Modifier.clip(CircleShape)
-                        .background(Color.LightGray)
+                        .background(Color.LightGray),
                 ) {
                     Icon(Icons.Filled.ArrowBack, null, tint = Color.Black)
                 }
-
-                Text(drinkState.data?.name ?: "", fontWeight = FontWeight.Bold)
             }
         }
     }

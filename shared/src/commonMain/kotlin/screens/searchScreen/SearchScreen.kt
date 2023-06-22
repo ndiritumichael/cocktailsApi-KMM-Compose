@@ -3,6 +3,7 @@ package screens.searchScreen
 import AsyncImage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.koin.core.component.get
 import presentation.DrinksSearchPresenter
+import screens.DrinkDetailsScreen.DrinksDetailScreen
 
 data class SearchScreen(val presenter: DrinksSearchPresenter) : Screen {
 
@@ -56,7 +58,11 @@ data class SearchScreen(val presenter: DrinksSearchPresenter) : Screen {
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(4.dp)) {
                     items(searchUiState.data) {
-                        Card(modifier = Modifier.padding(4.dp)) {
+                        Card(
+                            modifier = Modifier.padding(4.dp).clickable {
+                                navigator.push(DrinksDetailScreen(it.id))
+                            },
+                        ) {
                             Box() {
                                 AsyncImage(it.drinkImage, modifier = Modifier, loadingPlaceHolder = {
                                     Box(modifier = Modifier.background(Color.LightGray).size(200.dp)) {
