@@ -30,7 +30,7 @@ data class DrinkDTOItem(
     @SerialName("strImageSource")
     val strImageSource: String?,
     @SerialName("strIngredient1")
-    val strIngredient1: String,
+    val strIngredient1: String?,
     @SerialName("strIngredient10")
     val strIngredient10: String?,
     @SerialName("strIngredient11")
