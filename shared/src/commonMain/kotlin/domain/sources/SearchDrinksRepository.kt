@@ -1,7 +1,9 @@
 package domain.sources
 
 import data.sources.SearchService
+import domain.models.DrinkDetailModel
 import domain.models.DrinkModel
+import domain.models.mapper.toDrinkDetailModel
 import domain.models.mapper.toDrinkModel
 import utils.toModelResult
 
@@ -15,9 +17,9 @@ class SearchDrinksRepository(private val api: SearchService) : SearchDrinksSourc
         }
     }
 
-    override suspend fun getDrinkDetails(id: String): Result<DrinkModel> {
+    override suspend fun getDrinkDetails(id: String): Result<DrinkDetailModel> {
         return api.getDrinkDetails(id).toModelResult {
-            it.first().toDrinkModel()
+            it.first().toDrinkDetailModel()
         }
     }
 }
