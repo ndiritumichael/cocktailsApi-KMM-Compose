@@ -2,6 +2,7 @@ package screens.DrinkDetailsScreen
 
 import AsyncImage
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,9 +13,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
+import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -44,6 +49,7 @@ import presentation.DrinksSearchPresenter
 data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
     private val presenter: DrinksSearchPresenter by inject()
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
         val drinkState = presenter.drinkDetailState.collectAsState().value
@@ -89,6 +95,19 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                                     .background(gradient),
                             )
                             Text(drink.name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), style = MaterialTheme.typography.h4)
+                        }
+
+                    }
+
+                    item {
+                        HorizontalPager(pageCount = drink.ingredient.size, pageSize = PageSize.Fixed(105.dp)){
+                            val ingredients = drink.ingredient[it]
+                            Card (modifier = Modifier.width(100.dp)){
+                                Column {
+                                    Text(ingredients.name, fontWeight = FontWeight.Bold)
+                                    Text(ingredients.measurements)
+                                }
+                            }
                         }
                     }
                 }
