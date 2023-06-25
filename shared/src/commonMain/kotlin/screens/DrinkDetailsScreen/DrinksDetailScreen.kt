@@ -25,12 +25,18 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +50,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+
 import presentation.DrinksSearchPresenter
 
 data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
@@ -55,6 +62,7 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
         val drinkState = presenter.drinkDetailState.collectAsState().value
         val navigator = LocalNavigator.currentOrThrow
         val gradient = Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent, Color.Black))
+        var selectedLanguageIndex by remember { mutableStateOf(0) }
         LaunchedEffect(true) {
             presenter.getDrinkDetails(drinkId)
             // presenter.
@@ -108,6 +116,25 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                                     Text(ingredients.measurements)
                                 }
                             }
+                        }
+                    }
+                    item {
+                        Column {
+                            Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h4)
+                            TabRow(selectedTabIndex = selectedLanguageIndex){
+                                drink.instructions.mapIndexed { index,instruction ->
+                                Tab(selected = selectedLanguageIndex == index, onClick = {
+                                    selectedLanguageIndex = index
+
+                                },
+                                text = { Text(instruction.language) })
+
+
+                                }
+
+                            }
+
+                            Text(drink.instructions[selectedLanguageIndex].instruction)
                         }
                     }
                 }
