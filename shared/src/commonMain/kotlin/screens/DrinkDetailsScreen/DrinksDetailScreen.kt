@@ -2,6 +2,7 @@ package screens.DrinkDetailsScreen
 
 import AsyncImage
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,9 +34,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +51,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-
 import presentation.DrinksSearchPresenter
 
 data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
@@ -104,15 +104,14 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                             )
                             Text(drink.name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), style = MaterialTheme.typography.h4)
                         }
-
                     }
 
                     item {
-                        HorizontalPager(pageCount = drink.ingredient.size, pageSize = PageSize.Fixed(105.dp)){
+                        HorizontalPager(pageCount = drink.ingredient.size, pageSize = PageSize.Fixed(105.dp)) {
                             val ingredients = drink.ingredient[it]
-                            Card (modifier = Modifier.width(100.dp)){
-                                Column {
-                                    Text(ingredients.name, fontWeight = FontWeight.Bold)
+                            Card(modifier = Modifier.width(200.dp).padding(top = 8.dp, start = 8.dp), border = BorderStroke(0.5.dp, Color.Black)) {
+                                Column(modifier = Modifier.padding(8.dp)) {
+                                    Text(ingredients.name, fontWeight = FontWeight.Bold, modifier = Modifier.height(50.dp))
                                     Text(ingredients.measurements)
                                 }
                             }
@@ -121,17 +120,16 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                     item {
                         Column {
                             Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h4)
-                            TabRow(selectedTabIndex = selectedLanguageIndex){
-                                drink.instructions.mapIndexed { index,instruction ->
-                                Tab(selected = selectedLanguageIndex == index, onClick = {
-                                    selectedLanguageIndex = index
-
-                                },
-                                text = { Text(instruction.language) })
-
-
+                            TabRow(selectedTabIndex = selectedLanguageIndex) {
+                                drink.instructions.mapIndexed { index, instruction ->
+                                    Tab(
+                                        selected = selectedLanguageIndex == index,
+                                        onClick = {
+                                            selectedLanguageIndex = index
+                                        },
+                                        text = { Text(instruction.language) },
+                                    )
                                 }
-
                             }
 
                             Text(drink.instructions[selectedLanguageIndex].instruction)
