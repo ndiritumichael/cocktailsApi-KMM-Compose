@@ -21,7 +21,7 @@ class SearchService(private val client: HttpClient) : BaseApiResponse() {
             client.get(
                 UrlRoutes.GetCocktailByID.path,
             ) {
-                parameter(UrlRoutes.GetCocktailByID.path, id)
+                parameter(UrlRoutes.GetCocktailByID.queryKey!!, id)
             }
         }
     }

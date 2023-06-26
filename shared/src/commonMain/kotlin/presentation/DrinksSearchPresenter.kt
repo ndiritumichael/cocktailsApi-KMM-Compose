@@ -1,9 +1,7 @@
 package presentation
 
-import data.network.apiClient
-import data.sources.SearchService
+import domain.models.DrinkDetailModel
 import domain.models.DrinkModel
-import domain.sources.SearchDrinksRepository
 import domain.sources.SearchDrinksSource
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
@@ -22,6 +20,7 @@ class DrinksSearchPresenter : KoinComponent {
     private val repository: SearchDrinksSource by inject()
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
     private var job: Job? = null
+    private var detailJob: Job? = null
 
     private val _searchText = MutableStateFlow("")
     val searchText
@@ -33,9 +32,27 @@ class DrinksSearchPresenter : KoinComponent {
     val searchState: StateFlow<SearchScreenState>
         get() = _searchState.asStateFlow()
 
+
+    private val _drinkDetailState = MutableStateFlow(DetailScreenState())
+    val drinkDetailState
+        get() = _drinkDetailState.asStateFlow()
     init {
         Napier.e {
             "Starting the presenter......"
+        }
+    }
+
+    fun getDrinkDetails(id : String) {
+        _drinkDetailState.value = DetailScreenState(isLoading = true)
+        detailJob?.cancel()
+        detailJob = coroutineScope.launch {
+
+            val data = repository.getDrinkDetails(id)
+            data.onSuccess {
+                _drinkDetailState.value = DetailScreenState(data = it)
+            }.onFailure {
+                _drinkDetailState.value = DetailScreenState(errorMessage = it.message)
+            }
         }
     }
 
@@ -43,20 +60,19 @@ class DrinksSearchPresenter : KoinComponent {
         _searchState.value = SearchScreenState(isLoading = true)
         job?.cancel()
         job = coroutineScope.launch {
-            delay(2000)
+            delay(500)
             val data = repository.searchDrinkByName(search)
             data.onSuccess {
                 _searchState.value = SearchScreenState(data = it)
-
             }.onFailure {
                 _searchState.value = SearchScreenState(errorMessage = it.message)
             }
         }
     }
 
-    fun changeSearchString(search: String){
+    fun changeSearchString(search: String) {
         _searchText.value = search
-       // searchDrinks(_searchText.value)
+        // searchDrinks(_searchText.value)
     }
 
 
@@ -66,3 +82,10 @@ data class SearchScreenState(
     val data: List<DrinkModel> = emptyList(),
     val errorMessage: String? = null,
 )
+data class DetailScreenState(
+    val isLoading: Boolean = false,
+    val data: DrinkDetailModel? = null,
+    val errorMessage: String? = null,
+)
+
+
