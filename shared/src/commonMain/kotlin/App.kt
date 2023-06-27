@@ -12,17 +12,13 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
 import io.github.aakira.napier.Napier
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import presentation.DrinksSearchPresenter
 import screens.searchScreen.SearchScreen
-import kotlin.native.concurrent.ThreadLocal
-
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
-   val presenter = remember { DrinksSearchPresenter() }
+    // val presenter = remember { DrinksSearchPresenter() }
     MaterialTheme {
-
         Napier.e { "Starting app " }
         var greetingText by remember { mutableStateOf("Hello, World!") }
         var showImage by remember { mutableStateOf(true) }
@@ -30,8 +26,7 @@ fun App() {
             targetValue = if (showImage) 400.dp else 100.dp,
             spring(dampingRatio = Spring.DampingRatioHighBouncy),
         )
-Navigator(  SearchScreen(presenter))
-
+        Navigator(SearchScreen)
 
 //        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 //            Button(onClick = {

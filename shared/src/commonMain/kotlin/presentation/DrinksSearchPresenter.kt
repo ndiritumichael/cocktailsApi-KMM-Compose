@@ -62,7 +62,15 @@ class DrinksSearchPresenter : KoinComponent {
         job = coroutineScope.launch {
             delay(500)
             val data = repository.searchDrinkByName(search)
+
+            Napier.e {
+                " the detail data is $data"
+            }
             data.onSuccess {
+
+                Napier.e {
+                    " the detail data is $it"
+                }
                 _searchState.value = SearchScreenState(data = it)
             }.onFailure {
                 _searchState.value = SearchScreenState(errorMessage = it.message)
