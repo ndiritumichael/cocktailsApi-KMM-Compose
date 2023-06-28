@@ -33,12 +33,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
 import screens.DrinkDetailsScreen.DrinksDetailScreen
 
-data class SearchScreen(val presenter: DrinksSearchPresenter) : Screen {
-
+ object SearchScreen : Screen, KoinComponent {
+    private val presenter: DrinksSearchPresenter by inject()
     @Composable
     fun SearchUI() {
         //   var searchtext /*by remember {

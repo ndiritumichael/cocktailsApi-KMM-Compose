@@ -14,10 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -26,8 +23,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -52,6 +47,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
+import screens.common.tabs.CustomTab
 
 data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
     private val presenter: DrinksSearchPresenter by inject()
@@ -107,12 +103,16 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                     }
 
                     item {
-                        HorizontalPager(pageCount = drink.ingredient.size, pageSize = PageSize.Fixed(105.dp)) {
-                            val ingredients = drink.ingredient[it]
-                            Card(modifier = Modifier.width(200.dp).padding(top = 8.dp, start = 8.dp), border = BorderStroke(0.5.dp, Color.Black)) {
-                                Column(modifier = Modifier.padding(8.dp)) {
-                                    Text(ingredients.name, fontWeight = FontWeight.Bold, modifier = Modifier.height(50.dp))
-                                    Text(ingredients.measurements)
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            drink.ingredient.map { ingredients ->
+                                Card(
+                                    modifier = Modifier.padding(top = 8.dp, start = 8.dp),
+                                    border = BorderStroke(0.5.dp, Color.Black),
+                                ) {
+                                    Column(modifier = Modifier.padding(8.dp)) {
+                                        Text(ingredients.name, modifier = Modifier.height(50.dp))
+                                        Text(ingredients.measurements, fontWeight = FontWeight.Bold)
+                                    }
                                 }
                             }
                         }
@@ -120,17 +120,25 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                     item {
                         Column {
                             Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h4)
-                            TabRow(selectedTabIndex = selectedLanguageIndex) {
-                                drink.instructions.mapIndexed { index, instruction ->
-                                    Tab(
-                                        selected = selectedLanguageIndex == index,
-                                        onClick = {
-                                            selectedLanguageIndex = index
-                                        },
-                                        text = { Text(instruction.language) },
-                                    )
-                                }
-                            }
+//                            TabRow(selectedTabIndex = selectedLanguageIndex) {
+//                                drink.instructions.mapIndexed { index, instruction ->
+//                                    Tab(
+//                                        selected = selectedLanguageIndex == index,
+//                                        onClick = {
+//                                            selectedLanguageIndex = index
+//                                        },
+//                                        text = { Text(instruction.language) },
+//                                    )
+//                                }
+//                            }
+
+                            CustomTab(
+                                selectedItemIndex = selectedLanguageIndex,
+                                items = drink.instructions.map { it.language },
+                                onClick = { index ->
+                                    selectedLanguageIndex = index
+                                },
+                            )
 
                             Text(drink.instructions[selectedLanguageIndex].instruction)
                         }
