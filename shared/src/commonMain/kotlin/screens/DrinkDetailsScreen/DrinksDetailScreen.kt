@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import domain.models.DrinkIngredientsModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
@@ -102,21 +104,7 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                         }
                     }
 
-                    item {
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            drink.ingredient.map { ingredients ->
-                                Card(
-                                    modifier = Modifier.padding(top = 8.dp, start = 8.dp),
-                                    border = BorderStroke(0.5.dp, Color.Black),
-                                ) {
-                                    Column(modifier = Modifier.padding(8.dp)) {
-                                        Text(ingredients.name, modifier = Modifier.height(50.dp))
-                                        Text(ingredients.measurements, fontWeight = FontWeight.Bold)
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    itemsIndexed(drink.ingredient, itemContent = {index,ingredient ->IngredientListSection(index+1,ingredient)})
                     item {
                         Column {
                             Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h4)
@@ -158,4 +146,15 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
             }
         }
     }
+}
+
+
+@Composable
+fun IngredientListSection(index : Int,ingredients : DrinkIngredientsModel){
+
+    Row {
+        Text("$index " + ingredients.name, )
+        Text(ingredients.measurements, fontWeight = FontWeight.Bold)
+    }
+
 }
