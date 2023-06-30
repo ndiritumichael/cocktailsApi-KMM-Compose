@@ -2,7 +2,6 @@ package screens.DrinkDetailsScreen
 
 import AsyncImage
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -104,7 +102,7 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                         }
                     }
 
-                    itemsIndexed(drink.ingredient, itemContent = {index,ingredient ->IngredientListSection(index+1,ingredient)})
+                    itemsIndexed(drink.ingredient, itemContent = { index, ingredient -> IngredientListSection(index + 1, ingredient) })
                     item {
                         Column {
                             Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h4)
@@ -148,13 +146,11 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
     }
 }
 
-
 @Composable
-fun IngredientListSection(index : Int,ingredients : DrinkIngredientsModel){
-
+fun IngredientListSection(index: Int, ingredients: DrinkIngredientsModel) {
     Row {
-        Text("$index " + ingredients.name, )
-        Text(ingredients.measurements, fontWeight = FontWeight.Bold)
+        Text("$index " + ingredients.name, fontWeight = FontWeight.Bold)
+        Text("  -  ", fontWeight = FontWeight.Bold)
+        Text(ingredients.measurements, fontWeight = FontWeight.Light)
     }
-
 }

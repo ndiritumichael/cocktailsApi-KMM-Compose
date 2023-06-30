@@ -14,10 +14,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class DrinksSearchPresenter : KoinComponent {
-    private val repository: SearchDrinksSource by inject()
+class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinComponent {
+
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
     private var job: Job? = null
     private var detailJob: Job? = null
@@ -32,7 +31,6 @@ class DrinksSearchPresenter : KoinComponent {
     val searchState: StateFlow<SearchScreenState>
         get() = _searchState.asStateFlow()
 
-
     private val _drinkDetailState = MutableStateFlow(DetailScreenState())
     val drinkDetailState
         get() = _drinkDetailState.asStateFlow()
@@ -42,11 +40,10 @@ class DrinksSearchPresenter : KoinComponent {
         }
     }
 
-    fun getDrinkDetails(id : String) {
+    fun getDrinkDetails(id: String) {
         _drinkDetailState.value = DetailScreenState(isLoading = true)
         detailJob?.cancel()
         detailJob = coroutineScope.launch {
-
             val data = repository.getDrinkDetails(id)
             data.onSuccess {
                 _drinkDetailState.value = DetailScreenState(data = it)
@@ -67,7 +64,6 @@ class DrinksSearchPresenter : KoinComponent {
                 " the detail data is $data"
             }
             data.onSuccess {
-
                 Napier.e {
                     " the detail data is $it"
                 }
@@ -82,8 +78,6 @@ class DrinksSearchPresenter : KoinComponent {
         _searchText.value = search
         // searchDrinks(_searchText.value)
     }
-
-
 }
 data class SearchScreenState(
     val isLoading: Boolean = false,
@@ -95,5 +89,3 @@ data class DetailScreenState(
     val data: DrinkDetailModel? = null,
     val errorMessage: String? = null,
 )
-
-
