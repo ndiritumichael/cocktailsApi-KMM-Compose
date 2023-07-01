@@ -31,6 +31,6 @@ val commonModules = module {
         SearchDrinksRepository(get())
     }
     factory {
-        DrinksSearchPresenter()
+        DrinksSearchPresenter(get())
     }
 }
