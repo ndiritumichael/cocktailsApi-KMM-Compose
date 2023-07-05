@@ -6,6 +6,8 @@ import domain.sources.SearchDrinksRepository
 import domain.sources.SearchDrinksSource
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import org.koin.core.Koin
+import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import presentation.DrinksSearchPresenter
@@ -17,6 +19,10 @@ fun initKoinIos() = startKoin {
 }
 
 fun initLogging() = Napier.base(DebugAntilog())
+
+
+val Koin.drinkPresenter : DrinksSearchPresenter
+    get() = get()
 
 
 
