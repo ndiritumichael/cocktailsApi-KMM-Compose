@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Cyan
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -48,7 +50,7 @@ private fun MyTabIndicator(
                 x = indicatorOffset,
             )
             .clip(
-                shape = CircleShape,
+                shape = RoundedCornerShape(16.dp),
             )
             .background(
                 color = indicatorColor,
@@ -71,21 +73,31 @@ private fun MyTabItem(
         },
         animationSpec = tween(easing = LinearEasing),
     )
-    Text(
+
+    Box(
         modifier = Modifier
-            .clip(CircleShape)
-            .clickable {
-                onClick()
-            }
-            .width(tabWidth)
-            .padding(
-                vertical = 8.dp,
-                horizontal = 12.dp,
-            ),
-        text = text,
-        color = tabTextColor,
-        textAlign = TextAlign.Center,
-    )
+            .fillMaxHeight()
+            .width(
+                width = tabWidth,
+            ).background(Color.Red),
+    ) {
+        Text(
+            modifier = Modifier
+                .clip(CircleShape)
+                .clickable {
+                    onClick()
+                }
+                .width(tabWidth)
+                .fillMaxHeight()
+                .padding(
+                    vertical = 8.dp,
+                    horizontal = 12.dp,
+                ).border(1.dp, Cyan),
+            text = text,
+            color = tabTextColor,
+            textAlign = TextAlign.Center,
+        )
+    }
 }
 
 @Composable
@@ -107,8 +119,7 @@ fun CustomTab(
                 .clip(CircleShape)
                 .background(White)
                 .height(intrinsicSize = IntrinsicSize.Min)
-                .padding(16.dp)
-                .border(width = 0.5.dp, color = Color.Red,shape= CircleShape),
+                .padding(4.dp),
 
         ) {
             MyTabIndicator(
@@ -118,7 +129,7 @@ fun CustomTab(
             )
             Row(
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(8.dp).clip(CircleShape),
+                modifier = Modifier.padding(8.dp).clip(CircleShape).fillMaxHeight(),
             ) {
                 items.mapIndexed { index, text ->
                     val isSelected = index == selectedItemIndex
