@@ -56,20 +56,25 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
     fun searchDrinks(search: String) {
         _searchState.value = SearchScreenState(isLoading = true)
         job?.cancel()
-        job = coroutineScope.launch {
-            delay(500)
-            val data = repository.searchDrinkByName(search)
 
-            Napier.e {
-                " the detail data is $data"
-            }
-            data.onSuccess {
+        if (search.length < 3) {
+            SearchScreenState(isLoading = false)
+        } else {
+            job = coroutineScope.launch {
+                delay(500)
+                val data = repository.searchDrinkByName(search)
+
                 Napier.e {
-                    " the detail data is $it"
+                    " the detail data is $data"
                 }
-                _searchState.value = SearchScreenState(data = it)
-            }.onFailure {
-                _searchState.value = SearchScreenState(errorMessage = it.message)
+                data.onSuccess {
+                    Napier.e {
+                        " the detail data is $it"
+                    }
+                    _searchState.value = SearchScreenState(data = it)
+                }.onFailure {
+                    _searchState.value = SearchScreenState(errorMessage = it.message)
+                }
             }
         }
     }
@@ -78,10 +83,14 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
         _searchText.value = search
         // searchDrinks(_searchText.value)
     }
+
+
 }
 data class SearchScreenState(
+
     val isLoading: Boolean = false,
     val data: List<DrinkModel> = emptyList(),
+
     val errorMessage: String? = null,
 )
 data class DetailScreenState(

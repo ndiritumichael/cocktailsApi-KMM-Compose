@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -98,7 +99,13 @@ import screens.DrinkDetailsScreen.DrinksDetailScreen
                 }
 
                 AnimatedVisibility(searchUiState.isLoading, modifier = Modifier.align(Alignment.Center)) {
-                    CircularProgressIndicator(modifier = Modifier.size(50.dp).align(Alignment.Center))
+                    Column (horizontalAlignment = Alignment.CenterHorizontally){
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(50.dp)
+                    )
+
+                        Text("Searching Cocktails...")
+                }
                 }
             }
         }

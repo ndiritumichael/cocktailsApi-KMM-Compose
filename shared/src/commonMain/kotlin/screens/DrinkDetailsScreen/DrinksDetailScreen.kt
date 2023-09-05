@@ -101,11 +101,11 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                             Text(drink.name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), style = MaterialTheme.typography.h4)
                         }
                     }
-
+                    stickyHeader { Text("What you need", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h5, modifier = Modifier.padding(horizontal = 8.dp)) }
                     itemsIndexed(drink.ingredient, itemContent = { index, ingredient -> IngredientListSection(index + 1, ingredient) })
                     item {
                         Column {
-                            Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h4)
+                            Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h5, modifier = Modifier.padding(horizontal = 8.dp))
 //                            TabRow(selectedTabIndex = selectedLanguageIndex) {
 //                                drink.instructions.mapIndexed { index, instruction ->
 //                                    Tab(
@@ -148,8 +148,9 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
 
 @Composable
 fun IngredientListSection(index: Int, ingredients: DrinkIngredientsModel) {
-    Row {
-        Text("$index " + ingredients.name, fontWeight = FontWeight.Bold)
+    Row(Modifier.padding(horizontal = 8.dp)) {
+        Text("$index. ")
+        Text(ingredients.name, fontWeight = FontWeight.Bold)
         Text("  -  ", fontWeight = FontWeight.Bold)
         Text(ingredients.measurements, fontWeight = FontWeight.Light)
     }

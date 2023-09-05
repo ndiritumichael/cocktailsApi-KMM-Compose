@@ -25,4 +25,6 @@ class SearchService(private val client: HttpClient) : BaseApiResponse() {
             }
         }
     }
+
+
 }
