@@ -23,12 +23,12 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
+              // implementation(libs.kamel.image)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
@@ -54,8 +54,8 @@ kotlin {
             dependencies {
 
                 api(libs.androidx.activity.compose)
-                api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.9.0")
+                api(libs.androidx.appcompat)
+                api(libs.androidx.core.ktx)
 
                 implementation(libs.sqldelight.android.driver)
                 api(libs.coil.compose)
