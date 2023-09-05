@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,12 +34,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
 import screens.DrinkDetailsScreen.DrinksDetailScreen
 
-data class SearchScreen(val presenter: DrinksSearchPresenter) : Screen {
-
+ object SearchScreen : Screen, KoinComponent {
+    private val presenter: DrinksSearchPresenter by inject()
     @Composable
     fun SearchUI() {
         //   var searchtext /*by remember {
@@ -96,7 +99,13 @@ data class SearchScreen(val presenter: DrinksSearchPresenter) : Screen {
                 }
 
                 AnimatedVisibility(searchUiState.isLoading, modifier = Modifier.align(Alignment.Center)) {
-                    CircularProgressIndicator(modifier = Modifier.size(50.dp).align(Alignment.Center))
+                    Column (horizontalAlignment = Alignment.CenterHorizontally){
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(50.dp)
+                    )
+
+                        Text("Searching Cocktails...")
+                }
                 }
             }
         }

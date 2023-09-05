@@ -9,3 +9,10 @@ interface SearchDrinksSource {
 
     suspend fun getDrinkDetails(id: String): Result<DrinkDetailModel>
 }
+
+interface HomeScreenSource {
+
+    suspend fun getCockTailoftheDay(): Result<DrinkModel>
+
+    suspend fun getCocktailCategories(): Result<List<String>>
+}

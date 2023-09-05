@@ -5,6 +5,7 @@ import domain.models.DrinkDetailModel
 import domain.models.DrinkIngredientsModel
 import domain.models.DrinkInstructionLanguages
 import domain.models.DrinkModel
+import io.github.aakira.napier.Napier
 
 fun DrinkDTOItem.toDrinkModel(): DrinkModel {
     return DrinkModel(
@@ -35,13 +36,13 @@ fun DrinkDTOItem.toDrinkDetailModel(): DrinkDetailModel {
         if (strIngredient15 != null && strMeasure15 != null) { add(DrinkIngredientsModel(strIngredient15, strMeasure15)) }
     }
     val instructions = buildList {
-        add(DrinkInstructionLanguages("EN", strInstructions))
-        strInstructionsDE?.let { add(DrinkInstructionLanguages("DE", it)) }
-        strInstructionsES?.let { add(DrinkInstructionLanguages("ES", it)) }
-        strInstructionsFR?.let { add(DrinkInstructionLanguages("FR", it)) }
-        strInstructionsIT?.let { add(DrinkInstructionLanguages("IT", it)) }
-        strInstructionsZHHANS?.let { add(DrinkInstructionLanguages("ZH-HANS", it)) }
-        strInstructionsZHHANT?.let { add(DrinkInstructionLanguages("ZH-HANT", it)) }
+        add(DrinkInstructionLanguages("EN", strInstructions.addNewLine()))
+        strInstructionsDE?.let { add(DrinkInstructionLanguages("DE", it.addNewLine())) }
+        strInstructionsES?.let { add(DrinkInstructionLanguages("ES", it.addNewLine())) }
+        strInstructionsFR?.let { add(DrinkInstructionLanguages("FR", it.addNewLine())) }
+        strInstructionsIT?.let { add(DrinkInstructionLanguages("IT", it.addNewLine())) }
+        strInstructionsZHHANS?.let { add(DrinkInstructionLanguages("ZH-HANS", it.addNewLine())) }
+        strInstructionsZHHANT?.let { add(DrinkInstructionLanguages("ZH-HANT", it.addNewLine())) }
     }
     return DrinkDetailModel(
         id = idDrink,
@@ -52,4 +53,8 @@ fun DrinkDTOItem.toDrinkDetailModel(): DrinkDetailModel {
         instructions = instructions,
 
     )
+}
+
+fun String.addNewLine(): String {
+    return "-" + this.replace(". ", ".\n\n-")
 }

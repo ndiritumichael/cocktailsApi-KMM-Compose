@@ -14,10 +14,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class DrinksSearchPresenter : KoinComponent {
-    private val repository: SearchDrinksSource by inject()
+class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinComponent {
+
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
     private var job: Job? = null
     private var detailJob: Job? = null
@@ -32,7 +31,6 @@ class DrinksSearchPresenter : KoinComponent {
     val searchState: StateFlow<SearchScreenState>
         get() = _searchState.asStateFlow()
 
-
     private val _drinkDetailState = MutableStateFlow(DetailScreenState())
     val drinkDetailState
         get() = _drinkDetailState.asStateFlow()
@@ -42,11 +40,10 @@ class DrinksSearchPresenter : KoinComponent {
         }
     }
 
-    fun getDrinkDetails(id : String) {
+    fun getDrinkDetails(id: String) {
         _drinkDetailState.value = DetailScreenState(isLoading = true)
         detailJob?.cancel()
         detailJob = coroutineScope.launch {
-
             val data = repository.getDrinkDetails(id)
             data.onSuccess {
                 _drinkDetailState.value = DetailScreenState(data = it)
@@ -59,13 +56,25 @@ class DrinksSearchPresenter : KoinComponent {
     fun searchDrinks(search: String) {
         _searchState.value = SearchScreenState(isLoading = true)
         job?.cancel()
-        job = coroutineScope.launch {
-            delay(500)
-            val data = repository.searchDrinkByName(search)
-            data.onSuccess {
-                _searchState.value = SearchScreenState(data = it)
-            }.onFailure {
-                _searchState.value = SearchScreenState(errorMessage = it.message)
+
+        if (search.length < 3) {
+            SearchScreenState(isLoading = false)
+        } else {
+            job = coroutineScope.launch {
+                delay(500)
+                val data = repository.searchDrinkByName(search)
+
+                Napier.e {
+                    " the detail data is $data"
+                }
+                data.onSuccess {
+                    Napier.e {
+                        " the detail data is $it"
+                    }
+                    _searchState.value = SearchScreenState(data = it)
+                }.onFailure {
+                    _searchState.value = SearchScreenState(errorMessage = it.message)
+                }
             }
         }
     }
@@ -78,8 +87,10 @@ class DrinksSearchPresenter : KoinComponent {
 
 }
 data class SearchScreenState(
+
     val isLoading: Boolean = false,
     val data: List<DrinkModel> = emptyList(),
+
     val errorMessage: String? = null,
 )
 data class DetailScreenState(
@@ -87,5 +98,3 @@ data class DetailScreenState(
     val data: DrinkDetailModel? = null,
     val errorMessage: String? = null,
 )
-
-

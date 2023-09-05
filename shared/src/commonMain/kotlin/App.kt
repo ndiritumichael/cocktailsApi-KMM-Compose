@@ -1,37 +1,18 @@
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
-import io.github.aakira.napier.Napier
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import presentation.DrinksSearchPresenter
-import screens.searchScreen.SearchScreen
-import kotlin.native.concurrent.ThreadLocal
-
+import screens.home.HomeScreen
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
-   val presenter = remember { DrinksSearchPresenter() }
+    // val presenter = remember { DrinksSearchPresenter() }
     MaterialTheme {
-
-        Napier.e { "Starting app " }
-        var greetingText by remember { mutableStateOf("Hello, World!") }
-        var showImage by remember { mutableStateOf(true) }
-        val showLargeImage by animateDpAsState(
-            targetValue = if (showImage) 400.dp else 100.dp,
-            spring(dampingRatio = Spring.DampingRatioHighBouncy),
-        )
-Navigator(  SearchScreen(presenter))
-
+        Navigator(HomeScreen)
 
 //        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 //            Button(onClick = {

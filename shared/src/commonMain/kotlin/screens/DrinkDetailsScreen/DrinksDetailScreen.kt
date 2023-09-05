@@ -2,7 +2,6 @@ package screens.DrinkDetailsScreen
 
 import AsyncImage
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,20 +13,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -49,9 +43,11 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import domain.models.DrinkIngredientsModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
+import screens.common.tabs.CustomTab
 
 data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
     private val presenter: DrinksSearchPresenter by inject()
@@ -105,32 +101,30 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                             Text(drink.name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), style = MaterialTheme.typography.h4)
                         }
                     }
-
-                    item {
-                        HorizontalPager(pageCount = drink.ingredient.size, pageSize = PageSize.Fixed(105.dp)) {
-                            val ingredients = drink.ingredient[it]
-                            Card(modifier = Modifier.width(200.dp).padding(top = 8.dp, start = 8.dp), border = BorderStroke(0.5.dp, Color.Black)) {
-                                Column(modifier = Modifier.padding(8.dp)) {
-                                    Text(ingredients.name, fontWeight = FontWeight.Bold, modifier = Modifier.height(50.dp))
-                                    Text(ingredients.measurements)
-                                }
-                            }
-                        }
-                    }
+                    stickyHeader { Text("What you need", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h5, modifier = Modifier.padding(horizontal = 8.dp)) }
+                    itemsIndexed(drink.ingredient, itemContent = { index, ingredient -> IngredientListSection(index + 1, ingredient) })
                     item {
                         Column {
-                            Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h4)
-                            TabRow(selectedTabIndex = selectedLanguageIndex) {
-                                drink.instructions.mapIndexed { index, instruction ->
-                                    Tab(
-                                        selected = selectedLanguageIndex == index,
-                                        onClick = {
-                                            selectedLanguageIndex = index
-                                        },
-                                        text = { Text(instruction.language) },
-                                    )
-                                }
-                            }
+                            Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h5, modifier = Modifier.padding(horizontal = 8.dp))
+//                            TabRow(selectedTabIndex = selectedLanguageIndex) {
+//                                drink.instructions.mapIndexed { index, instruction ->
+//                                    Tab(
+//                                        selected = selectedLanguageIndex == index,
+//                                        onClick = {
+//                                            selectedLanguageIndex = index
+//                                        },
+//                                        text = { Text(instruction.language) },
+//                                    )
+//                                }
+//                            }
+
+                            CustomTab(
+                                selectedItemIndex = selectedLanguageIndex,
+                                items = drink.instructions.map { it.language },
+                                onClick = { index ->
+                                    selectedLanguageIndex = index
+                                },
+                            )
 
                             Text(drink.instructions[selectedLanguageIndex].instruction)
                         }
@@ -149,5 +143,15 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun IngredientListSection(index: Int, ingredients: DrinkIngredientsModel) {
+    Row(Modifier.padding(horizontal = 8.dp)) {
+        Text("$index. ")
+        Text(ingredients.name, fontWeight = FontWeight.Bold)
+        Text("  -  ", fontWeight = FontWeight.Bold)
+        Text(ingredients.measurements, fontWeight = FontWeight.Light)
     }
 }
