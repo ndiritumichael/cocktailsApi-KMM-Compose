@@ -1,7 +1,10 @@
 package di
 
 import data.network.apiClient
+import data.sources.HomeService
 import data.sources.SearchService
+import domain.sources.HomeDrinksRepository
+import domain.sources.HomeScreenSource
 import domain.sources.SearchDrinksRepository
 import domain.sources.SearchDrinksSource
 import io.github.aakira.napier.DebugAntilog
@@ -11,20 +14,19 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import presentation.DrinksSearchPresenter
+import presentation.HomeScreenPresenter
 
-fun initKoinIos() = startKoin {
+fun initKoin(enableNetworkLogs: Boolean) = startKoin {
     modules(commonModules)
 }.also {
-    Napier.base(DebugAntilog())
+    if (enableNetworkLogs) Napier.base(DebugAntilog())
 }
 
 fun initLogging() = Napier.base(DebugAntilog())
 
-
-val Koin.drinkPresenter : DrinksSearchPresenter
+fun KoinApplication.Companion.start(enableNetworkLogs: Boolean): KoinApplication = initKoin(enableNetworkLogs = enableNetworkLogs)
+val Koin.drinkPresenter: DrinksSearchPresenter
     get() = get()
-
-
 
 val commonModules = module {
     single {
@@ -38,5 +40,21 @@ val commonModules = module {
     }
     factory {
         DrinksSearchPresenter(get())
+    }
+    single {
+        HomeService(get())
+    }
+
+    factory {
+        HomeScreenPresenter(get())
+    }
+
+    single<HomeScreenSource> {
+
+        HomeDrinksRepository(get())
+    }
+
+    single {
+        HomeService(get())
     }
 }

@@ -1,6 +1,6 @@
 //
 //  Koin.swift
-//  Notflix
+
 //
 //  Created by Michael Ndiritu on 15/09/2022.
 //
