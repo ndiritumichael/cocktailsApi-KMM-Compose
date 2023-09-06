@@ -28,10 +28,11 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-              // implementation(libs.kamel.image)
+                // implementation(libs.kamel.image)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material)
+                implementation(compose.material3)
+
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
