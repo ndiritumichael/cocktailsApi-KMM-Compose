@@ -31,6 +31,7 @@ kotlin {
               // implementation(libs.kamel.image)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
+                implementation(compose.material3)
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
