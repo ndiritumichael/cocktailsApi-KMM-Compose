@@ -1,4 +1,4 @@
-package screens.DrinkDetailsScreen
+package screens.drinkDetailsScreen
 
 import AsyncImage
 import androidx.compose.animation.AnimatedVisibility
@@ -16,15 +16,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -98,14 +98,14 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                                 modifier = Modifier.fillMaxSize()
                                     .background(gradient),
                             )
-                            Text(drink.name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), style = MaterialTheme.typography.h4)
+                            Text(drink.name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), style = MaterialTheme.typography.bodyLarge)
                         }
                     }
-                    stickyHeader { Text("What you need", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h5, modifier = Modifier.padding(horizontal = 8.dp)) }
+                    stickyHeader { Text("What you need", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(horizontal = 8.dp)) }
                     itemsIndexed(drink.ingredient, itemContent = { index, ingredient -> IngredientListSection(index + 1, ingredient) })
                     item {
                         Column {
-                            Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.h5, modifier = Modifier.padding(horizontal = 8.dp))
+                            Text("Instructions", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(horizontal = 8.dp))
 //                            TabRow(selectedTabIndex = selectedLanguageIndex) {
 //                                drink.instructions.mapIndexed { index, instruction ->
 //                                    Tab(

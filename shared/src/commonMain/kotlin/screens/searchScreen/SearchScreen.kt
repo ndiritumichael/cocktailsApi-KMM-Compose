@@ -15,15 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -35,19 +32,15 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
-import screens.DrinkDetailsScreen.DrinksDetailScreen
+import screens.drinkDetailsScreen.DrinksDetailScreen
 
 object SearchScreen : Screen, KoinComponent {
     private val presenter: DrinksSearchPresenter by inject()
 
     @Composable
     fun SearchUI() {
-        //   var searchtext /*by remember {
-        // mutableStateOf("")
-        // }*/
         val searchtext = presenter.searchText.collectAsState().value
         val searchUiState = presenter.searchState.collectAsState().value
         val navigator = LocalNavigator.currentOrThrow
@@ -58,7 +51,6 @@ object SearchScreen : Screen, KoinComponent {
             }, onValueChange = {
                 // searchtext = it
                 presenter.changeSearchString(it)
-
             })
         }) {
             Box(modifier = Modifier.fillMaxSize()) {

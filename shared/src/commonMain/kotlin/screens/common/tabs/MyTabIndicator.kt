@@ -5,7 +5,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,8 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Cyan
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -79,7 +77,7 @@ private fun MyTabItem(
             .fillMaxHeight()
             .width(
                 width = tabWidth,
-            ).background(Color.Red),
+            ),
     ) {
         Text(
             modifier = Modifier
@@ -92,7 +90,7 @@ private fun MyTabItem(
                 .padding(
                     vertical = 8.dp,
                     horizontal = 12.dp,
-                ).border(1.dp, Cyan),
+                ),
             text = text,
             color = tabTextColor,
             textAlign = TextAlign.Center,
@@ -125,7 +123,7 @@ fun CustomTab(
             MyTabIndicator(
                 indicatorWidth = tabWidth,
                 indicatorOffset = indicatorOffset,
-                indicatorColor = MaterialTheme.colors.primary.copy(alpha = 0.3f),
+                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
             )
             Row(
                 horizontalArrangement = Arrangement.Center,
