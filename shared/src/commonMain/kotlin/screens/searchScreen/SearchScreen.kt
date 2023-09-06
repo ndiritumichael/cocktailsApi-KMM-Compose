@@ -40,8 +40,9 @@ import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
 import screens.DrinkDetailsScreen.DrinksDetailScreen
 
- object SearchScreen : Screen, KoinComponent {
+object SearchScreen : Screen, KoinComponent {
     private val presenter: DrinksSearchPresenter by inject()
+
     @Composable
     fun SearchUI() {
         //   var searchtext /*by remember {
@@ -52,7 +53,9 @@ import screens.DrinkDetailsScreen.DrinksDetailScreen
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(topBar = {
-            CustomSearchBar(value = searchtext, placeholder = "Search Cocktails", navigateUp = {}, onValueChange = {
+            CustomSearchBar(value = searchtext, placeholder = "Search Cocktails", navigateUp = {
+                navigator.pop()
+            }, onValueChange = {
                 // searchtext = it
                 presenter.changeSearchString(it)
                 presenter.searchDrinks(it)
@@ -99,13 +102,13 @@ import screens.DrinkDetailsScreen.DrinksDetailScreen
                 }
 
                 AnimatedVisibility(searchUiState.isLoading, modifier = Modifier.align(Alignment.Center)) {
-                    Column (horizontalAlignment = Alignment.CenterHorizontally){
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(50.dp)
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(50.dp),
+                        )
 
                         Text("Searching Cocktails...")
-                }
+                    }
                 }
             }
         }

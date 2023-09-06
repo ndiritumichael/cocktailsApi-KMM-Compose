@@ -35,9 +35,9 @@ fun CustomSearchBar(value: String, placeholder: String, navigateUp: () -> Unit, 
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-//            IconButton(onClick = { navigateUp() }) {
-//                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-//           }
+            IconButton(onClick = navigateUp) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+           }
             TextField(
                 value = value,
                 onValueChange = { name ->
