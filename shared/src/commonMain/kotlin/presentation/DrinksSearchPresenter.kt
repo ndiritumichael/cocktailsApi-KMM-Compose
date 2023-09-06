@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import screens.searchScreen.SearchScreen
 
 class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinComponent {
 
@@ -81,6 +82,7 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
 
     fun changeSearchString(search: String) {
         _searchText.value = search
+       searchDrinks(search)
         // searchDrinks(_searchText.value)
     }
 

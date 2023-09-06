@@ -58,7 +58,7 @@ object SearchScreen : Screen, KoinComponent {
             }, onValueChange = {
                 // searchtext = it
                 presenter.changeSearchString(it)
-                presenter.searchDrinks(it)
+
             })
         }) {
             Box(modifier = Modifier.fillMaxSize()) {
