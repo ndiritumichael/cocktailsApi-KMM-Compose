@@ -20,11 +20,10 @@ abstract class BaseApiResponse {
                 }
             } else {
                 val data = response.body<String>()
-// TODO: Handle errors better
+// TODO: Handle errors more granularly
                 Result.failure(Exception(" Something went Wrong : \n $data"))
             }
         } catch (e: Exception) {
-            e.printStackTrace()
             return Result.failure(Exception(" Something went Wrong : ${e.message}"))
         }
     }

@@ -25,12 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import domain.models.DrinkModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
@@ -52,40 +55,12 @@ object SearchScreen : Screen, KoinComponent {
                 // searchtext = it
                 presenter.changeSearchString(it)
             })
-        }) {
-            Box(modifier = Modifier.fillMaxSize()) {
+        }) { paddingValues ->
+            Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
                 LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(4.dp)) {
                     items(searchUiState.data) {
-                        Card(
-                            modifier = Modifier.padding(4.dp).clickable {
-                                navigator.push(DrinksDetailScreen(it.id))
-                            },
-                        ) {
-                            Box() {
-                                AsyncImage(it.drinkImage, modifier = Modifier, loadingPlaceHolder = {
-                                    Box(modifier = Modifier.background(Color.LightGray).size(200.dp)) {
-                                        CircularProgressIndicator(
-                                            modifier = Modifier.align(Alignment.Center),
-                                            color = Color.Magenta,
-                                        )
-                                    }
-                                })
-
-                                Box(
-                                    modifier = Modifier.height(200.dp).fillMaxWidth().background(
-                                        brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent, Color.Black.copy(0.5f))),
-                                    ).align(Alignment.BottomCenter),
-
-                                ) {
-                                    Text(
-                                        it.name,
-                                        modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
-                                        color = Color.White,
-                                        fontWeight = FontWeight.Bold,
-                                        textAlign = TextAlign.Center,
-                                    )
-                                }
-                            }
+                        CockTailCard(it) {
+                            navigator.push(DrinksDetailScreen(it.id))
                         }
                     }
                 }
@@ -109,5 +84,40 @@ object SearchScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         SearchUI()
+    }
+}
+
+@Composable
+fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier.padding(8.dp).clickable {
+            onClick()
+        }.fillMaxWidth().height(imageHeight),
+    ) {
+        Box() {
+            AsyncImage(drink.drinkImage, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds, loadingPlaceHolder = {
+                Box(modifier = Modifier.background(Color.LightGray).height(imageHeight)) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Color.Magenta,
+                    )
+                }
+            })
+
+            Box(
+                modifier = Modifier.height(imageHeight).fillMaxWidth().background(
+                    brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(0.5f), Color.Black)),
+                ).align(Alignment.BottomCenter),
+
+            ) {
+                Text(
+                    drink.name,
+                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(bottom = 10.dp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
     }
 }

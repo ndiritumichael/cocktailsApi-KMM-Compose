@@ -43,7 +43,9 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import domain.models.DrinkDetailModel
 import domain.models.DrinkIngredientsModel
+import domain.models.DrinkModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
@@ -57,7 +59,7 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
     override fun Content() {
         val drinkState = presenter.drinkDetailState.collectAsState().value
         val navigator = LocalNavigator.currentOrThrow
-        val gradient = Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent, Color.Black))
+
         var selectedLanguageIndex by remember { mutableStateOf(0) }
         LaunchedEffect(true) {
             presenter.getDrinkDetails(drinkId)
@@ -65,7 +67,7 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
         }
         Scaffold {
             Box(
-                modifier = Modifier.fillMaxSize().padding(top = 100.dp),
+                modifier = Modifier.fillMaxSize().padding(it),
                 contentAlignment = Alignment.TopCenter,
             ) {
                 AnimatedVisibility(drinkState.isLoading) {
@@ -84,22 +86,8 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
 
                 LazyColumn {
                     item {
-                        Box(
-                            modifier = Modifier.fillMaxWidth()
-                                .height(400.dp),
-                            // .background(Color.Black)
-                        ) {
-                            AsyncImage(
-                                drink.drinkImage,
-                                modifier = Modifier.fillMaxWidth(),
-                                contentScale = ContentScale.FillWidth,
-                            )
-                            Box(
-                                modifier = Modifier.fillMaxSize()
-                                    .background(gradient),
-                            )
-                            Text(drink.name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), style = MaterialTheme.typography.bodyLarge)
-                        }
+                        DrinkPoster(drink)
+
                     }
                     stickyHeader { Text("What you need", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(horizontal = 8.dp)) }
                     itemsIndexed(drink.ingredient, itemContent = { index, ingredient -> IngredientListSection(index + 1, ingredient) })
@@ -153,5 +141,27 @@ fun IngredientListSection(index: Int, ingredients: DrinkIngredientsModel) {
         Text(ingredients.name, fontWeight = FontWeight.Bold)
         Text("  -  ", fontWeight = FontWeight.Bold)
         Text(ingredients.measurements, fontWeight = FontWeight.Light)
+    }
+}
+@Composable
+fun DrinkPoster(drink : DrinkDetailModel){
+
+    val gradient = Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent, Color.Black))
+
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .height(400.dp),
+        // .background(Color.Black)
+    ) {
+        AsyncImage(
+            drink.drinkImage,
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillWidth,
+        )
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .background(gradient),
+        )
+        Text(drink.name, color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), style = MaterialTheme.typography.bodyLarge)
     }
 }

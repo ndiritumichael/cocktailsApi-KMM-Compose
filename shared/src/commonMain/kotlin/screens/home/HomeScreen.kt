@@ -1,7 +1,10 @@
 package screens.home
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
@@ -10,6 +13,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -25,6 +29,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.HomeScreenPresenter
+import screens.drinkDetailsScreen.DrinksDetailScreen
+import screens.searchScreen.CockTailCard
 import screens.searchScreen.SearchScreen
 
 object HomeScreen : Screen, KoinComponent {
@@ -35,6 +41,7 @@ object HomeScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val categoriesState by presenter.categories.collectAsState()
+        val randomDrink by presenter.topDrinkState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
         Scaffold(topBar = {
             TopAppBar(title = { Text("Kakashi Cocktails") }, actions = {
@@ -45,22 +52,43 @@ object HomeScreen : Screen, KoinComponent {
                 }
             })
         }) {
-            if (categoriesState.isLoading) {
-                CircularProgressIndicator()
-            }
+            Box(modifier = Modifier.padding(it)) {
+                if (categoriesState.isLoading) {
+                    CircularProgressIndicator()
+                }
 
-            categoriesState.errorMessage?.let { error ->
-                Text(error, color = Color.Red)
-            }
+                categoriesState.errorMessage?.let { error ->
+                    Text(error, color = Color.Red)
+                }
 
-            if (categoriesState.categories.isNotEmpty()) {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(175.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    items(categoriesState.categories) { category ->
-                        CategoryCard(category, colorList.random()) {
-                            println("The category is $category")
+                if (categoriesState.categories.isNotEmpty()) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(175.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                    ) {
+                        item(span = {
+                            GridItemSpan(maxLineSpan)
+                        }) {
+                            Text("Cocktail of the Day", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp))
+                        }
+                        randomDrink.drink?.let { drink ->
+                            item(span = {
+                                GridItemSpan(maxLineSpan)
+                            }) {
+                                CockTailCard(drink, imageHeight = 400.dp) {
+                                    navigator.push(DrinksDetailScreen(drink.id))
+                                }
+                            }
+                        }
+                        item(span = {
+                            GridItemSpan(maxLineSpan)
+                        }) {
+                            Text("Explore Categories", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp))
+                        }
+                        items(categoriesState.categories) { category ->
+                            CategoryCard(category, colorList.random()) {
+                                println("The category is $category")
+                            }
                         }
                     }
                 }
