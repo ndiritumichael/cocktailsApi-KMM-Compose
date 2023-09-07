@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import utils.getMessage
 
 class HomeScreenPresenter(private val repo: HomeScreenSource) : KoinComponent {
 
@@ -27,6 +28,19 @@ class HomeScreenPresenter(private val repo: HomeScreenSource) : KoinComponent {
 
     init {
         fetchCockTailCategories()
+        fetchTodayDrink()
+    }
+
+    fun fetchTodayDrink() {
+        randomDrinkJob?.cancel()
+        _topDrinkState.value = TodaysDrinkState(isLoading = true)
+        randomDrinkJob = scope.launch {
+            repo.getCockTailoftheDay().onSuccess {
+                _topDrinkState.value = TodaysDrinkState(drink = it)
+            }.onFailure {
+                _topDrinkState.value = TodaysDrinkState(errorMessage = it.getMessage())
+            }
+        }
     }
     fun fetchCockTailCategories() {
         _categoriesState.update {
