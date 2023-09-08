@@ -51,6 +51,8 @@ fun CustomSearchBar(value: String, placeholder: String, navigateUp: () -> Unit, 
                     Text(text = placeholder)
                 },
                 colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
 
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,

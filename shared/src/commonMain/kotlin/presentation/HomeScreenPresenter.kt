@@ -27,10 +27,12 @@ class HomeScreenPresenter(private val repo: HomeScreenSource) : KoinComponent {
         get() = _topDrinkState.asStateFlow()
 
     init {
+        getHomeScreenItems()
+    }
+    fun getHomeScreenItems() {
         fetchCockTailCategories()
         fetchTodayDrink()
     }
-
     fun fetchTodayDrink() {
         randomDrinkJob?.cancel()
         _topDrinkState.value = TodaysDrinkState(isLoading = true)

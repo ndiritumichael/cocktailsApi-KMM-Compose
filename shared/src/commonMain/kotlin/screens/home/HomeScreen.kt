@@ -1,6 +1,7 @@
 package screens.home
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -8,9 +9,12 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +24,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -51,6 +56,10 @@ object HomeScreen : Screen, KoinComponent {
                     Icon(Icons.Default.Search, "search icon")
                 }
             })
+        }, floatingActionButton = {
+            FloatingActionButton(onClick = { presenter.getHomeScreenItems() }) {
+                Icon(Icons.Default.Refresh, "refresh")
+            }
         }) {
             Box(modifier = Modifier.padding(it)) {
                 if (categoriesState.isLoading) {
@@ -58,7 +67,15 @@ object HomeScreen : Screen, KoinComponent {
                 }
 
                 categoriesState.errorMessage?.let { error ->
-                    Text(error, color = Color.Red)
+                    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(error, color = Color.Red)
+                        Button({
+                            presenter
+                                .fetchCockTailCategories()
+                        }) {
+                            Text("Retry")
+                        }
+                    }
                 }
 
                 if (categoriesState.categories.isNotEmpty()) {
@@ -75,8 +92,10 @@ object HomeScreen : Screen, KoinComponent {
                             item(span = {
                                 GridItemSpan(maxLineSpan)
                             }) {
-                                CockTailCard(drink, imageHeight = 400.dp) {
-                                    navigator.push(DrinksDetailScreen(drink.id))
+                                Box(modifier = Modifier.fillMaxWidth()) {
+                                    CockTailCard(drink, imageHeight = 400.dp) {
+                                        navigator.push(DrinksDetailScreen(drink.id))
+                                    }
                                 }
                             }
                         }
