@@ -27,7 +27,7 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryCard(name: String, color: Color, onCategoryClicked: () -> Unit) {
-    val gradient = Brush.linearGradient(listOf(color.copy(0.1f), color.copy(0.3f)))
+    val gradient = Brush.linearGradient(listOf(color.copy(0.3f), color.copy(0.1f)))
     Card(
         onClick = onCategoryClicked,
         modifier = Modifier.fillMaxWidth().height(175.dp).padding(bottom = 16.dp, end = 16.dp, start = 8.dp),
