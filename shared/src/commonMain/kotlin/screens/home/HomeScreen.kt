@@ -2,6 +2,7 @@ package screens.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -62,7 +63,7 @@ object HomeScreen : Screen, KoinComponent {
                 Icon(Icons.Default.Refresh, "refresh")
             }
         }) {
-            Box(modifier = Modifier.padding(it)) {
+            Box(modifier = Modifier.padding(it).fillMaxSize()) {
                 if (categoriesState.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
                 }
@@ -84,11 +85,6 @@ object HomeScreen : Screen, KoinComponent {
                         columns = GridCells.Adaptive(175.dp),
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
                     ) {
-//                        item(span = {
-//                            GridItemSpan(maxLineSpan)
-//                        }) {
-//                            Text("Cocktail of the Day", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp))
-//                        }
                         randomDrink.drink?.let { drink ->
                             item(span = {
                                 GridItemSpan(maxLineSpan)
@@ -97,8 +93,14 @@ object HomeScreen : Screen, KoinComponent {
                                     CockTailCard(drink, imageHeight = 400.dp) {
                                         navigator.push(DrinksDetailScreen(drink.id))
                                     }
-                                    Text("Cocktail of the Day", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp).align(
-                                        Alignment.TopCenter), fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onPrimary
+                                    Text(
+                                        "Cocktail of the Day",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        modifier = Modifier.padding(8.dp).align(
+                                            Alignment.TopCenter,
+                                        ),
+                                        fontWeight = FontWeight.ExtraBold,
+                                        color = MaterialTheme.colorScheme.onPrimary,
                                     )
                                 }
                             }
@@ -126,5 +128,6 @@ val colorList = listOf(
     Color.Green,
     Color.Magenta,
     Color.Blue,
+
 
 )
