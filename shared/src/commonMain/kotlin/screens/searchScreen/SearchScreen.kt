@@ -17,14 +17,17 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,11 +45,13 @@ import screens.drinkDetailsScreen.DrinksDetailScreen
 object SearchScreen : Screen, KoinComponent {
     private val presenter: DrinksSearchPresenter by inject()
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun SearchUI() {
         val searchtext = presenter.searchText.collectAsState().value
         val searchUiState = presenter.searchState.collectAsState().value
         val navigator = LocalNavigator.currentOrThrow
+        val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
 
         Scaffold(topBar = {
             CustomSearchBar(value = searchtext, placeholder = "Search Cocktails", navigateUp = {
@@ -55,15 +60,14 @@ object SearchScreen : Screen, KoinComponent {
                 // searchtext = it
                 presenter.changeSearchString(it)
             })
-        }) { paddingValues ->
+        }, modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection)) { paddingValues ->
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-                LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(4.dp)) {
-                    items(searchUiState.data) {
-                        CockTailCard(it) {
-                            navigator.push(DrinksDetailScreen(it.id))
-                        }
-                    }
+
+                CocktailListGrid(searchUiState.data){
+                    navigator.push(DrinksDetailScreen(it))
+
                 }
+
                 searchUiState.errorMessage?.let {
                     Text(it, color = Color.Red)
                 }
@@ -84,6 +88,18 @@ object SearchScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         SearchUI()
+    }
+}
+
+@Composable
+fun CocktailListGrid(drinks : List<DrinkModel>,gridWidthItems : Int = 2, onClick: (id : String) -> Unit){
+
+    LazyVerticalGrid(columns = GridCells.Fixed(gridWidthItems), contentPadding = PaddingValues(4.dp)) {
+        items(drinks) {
+            CockTailCard(it) {
+                onClick(it.id)
+            }
+        }
     }
 }
 
