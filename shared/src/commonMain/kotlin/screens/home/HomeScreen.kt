@@ -22,12 +22,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -50,19 +53,28 @@ object HomeScreen : Screen, KoinComponent {
         val categoriesState by presenter.categories.collectAsState()
         val randomDrink by presenter.topDrinkState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
-        Scaffold(topBar = {
-            TopAppBar(title = { Text("Kakashi Cocktails") }, actions = {
-                IconButton(onClick = {
-                    navigator.push(SearchScreen)
-                }) {
-                    Icon(Icons.Default.Search, "search icon")
+        val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
+
+        LaunchedEffect(true){
+            presenter.getHomeScreenItems()
+        }
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
+            topBar = {
+                TopAppBar(title = { Text("Kakashi Cocktails") }, actions = {
+                    IconButton(onClick = {
+                        navigator.push(SearchScreen)
+                    }) {
+                        Icon(Icons.Default.Search, "search icon")
+                    }
+                }, scrollBehavior = scrollBehaviour)
+            },
+            floatingActionButton = {
+                FloatingActionButton(onClick = { presenter.getHomeScreenItems() }) {
+                    Icon(Icons.Default.Refresh, "refresh")
                 }
-            })
-        }, floatingActionButton = {
-            FloatingActionButton(onClick = { presenter.getHomeScreenItems() }) {
-                Icon(Icons.Default.Refresh, "refresh")
-            }
-        }) {
+            },
+        ) {
             Box(modifier = Modifier.padding(it).fillMaxSize()) {
                 if (categoriesState.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
@@ -128,6 +140,5 @@ val colorList = listOf(
     Color.Green,
     Color.Magenta,
     Color.Blue,
-
 
 )
