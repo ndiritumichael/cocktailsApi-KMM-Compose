@@ -13,21 +13,18 @@ class HomeDrinksRepository(private val api: HomeService) : HomeScreenSource {
     }
 
     override suspend fun getCocktailCategories(): Result<List<String>> {
-    return api.categoryList().toModelResult {
-        it.map {category ->
-            category.strCategory
-
-
+        return api.categoryList().toModelResult {
+            it.map { category ->
+                category.strCategory
+            }
         }
-    }
     }
 
     override suspend fun getcategoryDrinks(category: String): Result<List<DrinkModel>> {
-       return api.getCategoryDrinks(category).toModelResult {
-           it.map{ drinkDTOItem ->
-           drinkDTOItem.toDrinkModel()
-
-           }
-       }
+        return api.getCategoryDrinks(category).toModelResult {
+            it.map { drinkDTOItem ->
+                drinkDTOItem.toDrinkModel()
+            }
+        }
     }
 }

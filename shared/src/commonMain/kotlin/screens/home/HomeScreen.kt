@@ -39,6 +39,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.HomeScreenPresenter
+import screens.categoryDrinks.CategoryDrinksScreen
 import screens.drinkDetailsScreen.DrinksDetailScreen
 import screens.searchScreen.CockTailCard
 import screens.searchScreen.SearchScreen
@@ -124,7 +125,7 @@ object HomeScreen : Screen, KoinComponent {
                         }
                         items(categoriesState.categories) { category ->
                             CategoryCard(category, colorList.random()) {
-                                println("The category is $category")
+                                navigator.push(CategoryDrinksScreen(category))
                             }
                         }
                     }
