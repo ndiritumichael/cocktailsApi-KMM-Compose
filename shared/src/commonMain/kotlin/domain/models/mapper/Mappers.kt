@@ -1,5 +1,6 @@
 package domain.models.mapper
 
+import data.network.dto.drinkDto.CategoryDrinkDTO
 import data.network.dto.drinkDto.DrinkDTOItem
 import domain.models.DrinkDetailModel
 import domain.models.DrinkIngredientsModel
@@ -52,6 +53,15 @@ fun DrinkDTOItem.toDrinkDetailModel(): DrinkDetailModel {
         ingredient = ingredientsModel,
         instructions = instructions,
 
+    )
+}
+
+
+fun CategoryDrinkDTO.toDrinkModel():DrinkModel{
+    return DrinkModel(
+        id = this.idDrink,
+        name = this.strDrink,
+        drinkImage = this.strDrinkThumb
     )
 }
 
