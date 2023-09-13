@@ -62,17 +62,15 @@ object SearchScreen : Screen, KoinComponent {
             })
         }, modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection)) { paddingValues ->
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-
-                CocktailListGrid(searchUiState.data){
+                CocktailListGrid(searchUiState.data) {
                     navigator.push(DrinksDetailScreen(it))
-
                 }
 
                 searchUiState.errorMessage?.let {
                     Text(it, color = Color.Red)
                 }
 
-                AnimatedVisibility(searchUiState.isLoading, modifier = Modifier.align(Alignment.Center)) {
+                AnimatedVisibility(searchUiState.isLoading, modifier = Modifier.align(Alignment.TopCenter)) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(50.dp),
@@ -92,8 +90,7 @@ object SearchScreen : Screen, KoinComponent {
 }
 
 @Composable
-fun CocktailListGrid(drinks : List<DrinkModel>,gridWidthItems : Int = 2, onClick: (id : String) -> Unit){
-
+fun CocktailListGrid(drinks: List<DrinkModel>, gridWidthItems: Int = 2, onClick: (id: String) -> Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(gridWidthItems), contentPadding = PaddingValues(4.dp)) {
         items(drinks) {
             CockTailCard(it) {

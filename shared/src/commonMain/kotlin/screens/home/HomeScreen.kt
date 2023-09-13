@@ -56,7 +56,7 @@ object HomeScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
 
-        LaunchedEffect(true){
+        LaunchedEffect(true) {
             presenter.getHomeScreenItems()
         }
         Scaffold(
