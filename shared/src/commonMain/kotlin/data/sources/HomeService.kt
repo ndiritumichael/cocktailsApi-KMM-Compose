@@ -37,4 +37,5 @@ class HomeService(private val client: HttpClient) : BaseApiResponse() {
             client.get(UrlRoutes.ListIngredients.path)
         }
     }
+
 }

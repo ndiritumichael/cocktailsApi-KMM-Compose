@@ -72,6 +72,8 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
         // searchDrinks(_searchText.value)
     }
 }
+
+
 data class SearchScreenState(
 
     val isLoading: Boolean = false,
