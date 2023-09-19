@@ -1,5 +1,6 @@
 package domain.sources
 
+import data.network.dto.ingredients.IngredientModel
 import domain.models.DrinkDetailModel
 import domain.models.DrinkModel
 
@@ -17,4 +18,6 @@ interface HomeScreenSource {
     suspend fun getCocktailCategories(): Result<List<String>>
     
     suspend fun getcategoryDrinks(category: String): Result<List<DrinkModel>>
+
+    suspend fun getAllIngredientsList(): Result<List<String>>
 }
