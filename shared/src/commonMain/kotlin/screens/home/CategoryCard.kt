@@ -30,7 +30,7 @@ fun CategoryCard(name: String, color: Color, onCategoryClicked: () -> Unit) {
     val gradient = Brush.linearGradient(listOf(color.copy(0.3f), color.copy(0.1f)))
     Card(
         onClick = onCategoryClicked,
-        modifier = Modifier.fillMaxWidth().height(175.dp).padding(bottom = 16.dp, end = 16.dp, start = 8.dp),
+        modifier = Modifier.fillMaxWidth().size(175.dp).padding(bottom = 16.dp, end = 16.dp, start = 8.dp),
         elevation = CardDefaults.elevatedCardElevation(4.dp),
         shape = RoundedCornerShape(16.dp),
     ) {
