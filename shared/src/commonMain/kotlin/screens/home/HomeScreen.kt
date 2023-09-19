@@ -4,15 +4,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -36,13 +38,17 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.HomeScreenPresenter
+import presentation.IngredientStates
 import screens.categoryDrinks.CategoryDrinksScreen
 import screens.drinkDetailsScreen.DrinksDetailScreen
 import screens.searchScreen.CockTailCard
 import screens.searchScreen.SearchScreen
+import screens.uiutils.getIngredientImage
 
 object HomeScreen : Screen, KoinComponent {
 
@@ -53,8 +59,9 @@ object HomeScreen : Screen, KoinComponent {
     override fun Content() {
         val categoriesState by presenter.categories.collectAsState()
         val randomDrink by presenter.topDrinkState.collectAsState()
+        val ingredients by presenter.ingredientStates.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
-        val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
+        val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
         LaunchedEffect(true) {
             presenter.getHomeScreenItems()
@@ -93,39 +100,78 @@ object HomeScreen : Screen, KoinComponent {
                     }
                 }
 
-                if (categoriesState.categories.isNotEmpty()) {
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(175.dp),
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-                    ) {
-                        randomDrink.drink?.let { drink ->
-                            item(span = {
-                                GridItemSpan(maxLineSpan)
-                            }) {
-                                Box(modifier = Modifier.fillMaxWidth()) {
-                                    CockTailCard(drink, imageHeight = 400.dp) {
-                                        navigator.push(DrinksDetailScreen(drink.id))
+                LazyColumn(
+
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                ) {
+                    randomDrink.drink?.let { drink ->
+                        item {
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                CockTailCard(drink, imageHeight = 400.dp) {
+                                    navigator.push(DrinksDetailScreen(drink.id))
+                                }
+                                Text(
+                                    "Cocktail of the Day",
+                                    style = MaterialTheme.typography.titleLarge,
+                                    modifier = Modifier.padding(8.dp).align(
+                                        Alignment.TopCenter,
+                                    ),
+                                    fontWeight = FontWeight.ExtraBold,
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                )
+                            }
+                        }
+                    }
+
+                    if (categoriesState.categories.isNotEmpty()) {
+                        item {
+                            Text("Explore Categories", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp))
+                        }
+                        item {
+                            LazyHorizontalGrid(
+                                rows = GridCells.Fixed(2),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).height(360.dp),
+                            ) {
+                                items(categoriesState.categories) { category ->
+                                    CategoryCard(category, colorList.random()) {
+                                        navigator.push(CategoryDrinksScreen(category))
                                     }
-                                    Text(
-                                        "Cocktail of the Day",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        modifier = Modifier.padding(8.dp).align(
-                                            Alignment.TopCenter,
-                                        ),
-                                        fontWeight = FontWeight.ExtraBold,
-                                        color = MaterialTheme.colorScheme.onPrimary,
-                                    )
                                 }
                             }
                         }
-                        item(span = {
-                            GridItemSpan(maxLineSpan)
-                        }) {
-                            Text("Explore Categories", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp))
+                    }
+
+                    item {
+                        Text("Explore Ingredients", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp))
+                    }
+
+                    when (val ingredients = ingredients) {
+                        is IngredientStates.Failure -> {
                         }
-                        items(categoriesState.categories) { category ->
-                            CategoryCard(category, colorList.random()) {
-                                navigator.push(CategoryDrinksScreen(category))
+                        IngredientStates.Idle -> {}
+                        IngredientStates.Loading -> {
+                        }
+                        is IngredientStates.Success -> {
+                            item {
+                                LazyHorizontalGrid(
+                                    rows = GridCells.Fixed(2),
+                                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).height(250.dp),
+                                ) {
+                                    items(ingredients.ingredients) { name ->
+                                        Card(modifier = Modifier.height(120.dp)) {
+                                            Column(modifier = Modifier.padding(4.dp)) {
+                                                KamelImage(
+                                                    asyncPainterResource(
+                                                        getIngredientImage(name),
+                                                    ),
+                                                    "ingredient image",
+                                                )
+
+                                                Text(name)
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
