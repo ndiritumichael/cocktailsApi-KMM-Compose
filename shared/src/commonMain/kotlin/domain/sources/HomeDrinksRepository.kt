@@ -27,4 +27,12 @@ class HomeDrinksRepository(private val api: HomeService) : HomeScreenSource {
             }
         }
     }
+
+    override suspend fun getAllIngredientsList(): Result<List<String>> {
+        return api.getIngredientList().toModelResult { ingredientModelList ->
+            ingredientModelList.map { 
+                it.strIngredient1
+            }
+        }
+    }
 }

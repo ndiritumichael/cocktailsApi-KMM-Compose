@@ -1,5 +1,6 @@
 package presentation
 
+import data.network.dto.ingredients.IngredientModel
 import domain.models.DrinkModel
 import domain.sources.HomeScreenSource
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +19,7 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
     private var categoriesJob: Job? = null
     private var randomDrinkJob: Job? = null
     private var drinkCategoriesJob : Job? = null
+    private var ingredientsJob: Job? = null
 
     private val _categoriesState = MutableStateFlow(CategoriesState())
     val categories = _categoriesState.asStateFlow()
@@ -31,9 +33,30 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
         get() = _categoryDrinkState.asStateFlow()
 
 
+    private val _ingredientStates = MutableStateFlow<IngredientStates>(IngredientStates.Idle)
+    val ingredientStates
+        get() = _ingredientStates.asStateFlow()
+
+
+
+
     fun getHomeScreenItems() {
         fetchCockTailCategories()
         fetchTodayDrink()
+        fetchIngredientList()
+    }
+
+    fun fetchIngredientList(){
+        ingredientsJob?.cancel()
+        _ingredientStates.value = IngredientStates.Loading
+        ingredientsJob = scope.launch {
+            homeScreenSource.getAllIngredientsList().onSuccess {
+                _ingredientStates.value = IngredientStates.Success(it)
+            }.onFailure {
+                _ingredientStates.value = IngredientStates.Failure(it.getMessage())
+            }
+        }
+
     }
     fun fetchTodayDrink() {
         randomDrinkJob?.cancel()
@@ -75,6 +98,8 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
             }
         }
     }
+
+
 }
 
 data class CategoriesState(
@@ -97,4 +122,13 @@ sealed class CategoryDrinkState {
 
     data class Failure (val errorMessage: String) : CategoryDrinkState()
 
+}
+
+sealed class IngredientStates{
+    object Loading : IngredientStates()
+    object Idle : IngredientStates()
+
+    data class Success (val ingredients : List<String>) : IngredientStates()
+
+    data class Failure (val errorMessage: String) : IngredientStates()
 }
