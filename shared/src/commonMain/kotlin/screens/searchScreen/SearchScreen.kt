@@ -1,6 +1,5 @@
 package screens.searchScreen
 
-import AsyncImage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,6 +36,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import domain.models.DrinkModel
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
@@ -62,17 +63,15 @@ object SearchScreen : Screen, KoinComponent {
             })
         }, modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection)) { paddingValues ->
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-
-                CocktailListGrid(searchUiState.data){
+                CocktailListGrid(searchUiState.data) {
                     navigator.push(DrinksDetailScreen(it))
-
                 }
 
                 searchUiState.errorMessage?.let {
                     Text(it, color = Color.Red)
                 }
 
-                AnimatedVisibility(searchUiState.isLoading, modifier = Modifier.align(Alignment.Center)) {
+                AnimatedVisibility(searchUiState.isLoading, modifier = Modifier.align(Alignment.TopCenter)) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(50.dp),
@@ -92,8 +91,7 @@ object SearchScreen : Screen, KoinComponent {
 }
 
 @Composable
-fun CocktailListGrid(drinks : List<DrinkModel>,gridWidthItems : Int = 2, onClick: (id : String) -> Unit){
-
+fun CocktailListGrid(drinks: List<DrinkModel>, gridWidthItems: Int = 2, onClick: (id: String) -> Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(gridWidthItems), contentPadding = PaddingValues(4.dp)) {
         items(drinks) {
             CockTailCard(it) {
@@ -111,14 +109,16 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
         }.fillMaxWidth().height(imageHeight),
     ) {
         Box() {
-            AsyncImage(drink.drinkImage, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds, loadingPlaceHolder = {
-                Box(modifier = Modifier.background(Color.LightGray).height(imageHeight)) {
+            KamelImage(asyncPainterResource(drink.drinkImage), modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds, onLoading = { progress ->
+                Box(modifier = Modifier.background(Color.LightGray).height(imageHeight).fillMaxWidth()) {
+
                     CircularProgressIndicator(
+                        progress = progress,
                         modifier = Modifier.align(Alignment.Center),
                         color = Color.Magenta,
                     )
                 }
-            })
+            }, contentDescription = null)
 
             Box(
                 modifier = Modifier.height(imageHeight).fillMaxWidth().background(

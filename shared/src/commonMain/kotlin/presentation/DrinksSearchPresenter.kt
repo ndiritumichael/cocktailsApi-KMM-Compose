@@ -3,11 +3,9 @@ package presentation
 import domain.models.DrinkDetailModel
 import domain.models.DrinkModel
 import domain.sources.SearchDrinksSource
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,11 +32,6 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
     private val _drinkDetailState = MutableStateFlow(DetailScreenState())
     val drinkDetailState
         get() = _drinkDetailState.asStateFlow()
-    init {
-        Napier.e {
-            "Starting the presenter......"
-        }
-    }
 
     fun getDrinkDetails(id: String) {
         _drinkDetailState.value = DetailScreenState(isLoading = true)
@@ -64,13 +57,7 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
                 delay(500)
                 val data = repository.searchDrinkByName(search)
 
-                Napier.e {
-                    " the detail data is $data"
-                }
                 data.onSuccess {
-                    Napier.e {
-                        " the detail data is $it"
-                    }
                     _searchState.value = SearchScreenState(data = it)
                 }.onFailure {
                     _searchState.value = SearchScreenState(errorMessage = it.message)
@@ -85,6 +72,8 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
         // searchDrinks(_searchText.value)
     }
 }
+
+
 data class SearchScreenState(
 
     val isLoading: Boolean = false,

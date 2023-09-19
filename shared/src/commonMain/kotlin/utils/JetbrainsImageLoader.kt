@@ -7,7 +7,7 @@
 //
 //
 //@Composable
-//fun <T> AsyncImage(
+//fun <T> utils.AsyncImage(
 //    load: suspend () -> T,
 //    painterFor: @Composable (T) -> Painter,
 //    contentDescription: String,

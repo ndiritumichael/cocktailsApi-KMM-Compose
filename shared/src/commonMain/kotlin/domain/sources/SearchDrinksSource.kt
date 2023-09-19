@@ -17,4 +17,6 @@ interface HomeScreenSource {
     suspend fun getCocktailCategories(): Result<List<String>>
     
     suspend fun getcategoryDrinks(category: String): Result<List<DrinkModel>>
+
+    suspend fun getAllIngredientsList(): Result<List<String>>
 }

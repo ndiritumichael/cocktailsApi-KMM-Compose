@@ -1,6 +1,5 @@
 package screens.drinkDetailsScreen
 
-import AsyncImage
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -45,7 +44,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import domain.models.DrinkDetailModel
 import domain.models.DrinkIngredientsModel
-import domain.models.DrinkModel
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
@@ -87,7 +87,6 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                 LazyColumn {
                     item {
                         DrinkPoster(drink)
-
                     }
                     stickyHeader { Text("What you need", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(horizontal = 8.dp)) }
                     itemsIndexed(drink.ingredient, itemContent = { index, ingredient -> IngredientListSection(index + 1, ingredient) })
@@ -143,9 +142,9 @@ fun IngredientListSection(index: Int, ingredients: DrinkIngredientsModel) {
         Text(ingredients.measurements, fontWeight = FontWeight.Light)
     }
 }
-@Composable
-fun DrinkPoster(drink : DrinkDetailModel){
 
+@Composable
+fun DrinkPoster(drink: DrinkDetailModel) {
     val gradient = Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent, Color.Black))
 
     Box(
@@ -153,10 +152,11 @@ fun DrinkPoster(drink : DrinkDetailModel){
             .height(400.dp),
         // .background(Color.Black)
     ) {
-        AsyncImage(
-            drink.drinkImage,
+        KamelImage(
+            asyncPainterResource(drink.drinkImage),
             modifier = Modifier.fillMaxWidth(),
             contentScale = ContentScale.FillWidth,
+            contentDescription = null,
         )
         Box(
             modifier = Modifier.fillMaxSize()
