@@ -1,6 +1,5 @@
 package domain.sources
 
-import data.network.dto.ingredients.IngredientModel
 import domain.models.DrinkDetailModel
 import domain.models.DrinkModel
 
