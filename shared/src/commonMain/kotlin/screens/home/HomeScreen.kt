@@ -28,9 +28,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -66,9 +66,6 @@ object HomeScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-        LaunchedEffect(true) {
-            presenter.getHomeScreenItems()
-        }
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
             topBar = {
@@ -136,7 +133,10 @@ object HomeScreen : Screen, KoinComponent {
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).height(360.dp),
                             ) {
                                 items(categoriesState.categories) { category ->
-                                    CategoryCard(category, colorList.random()) {
+                                    val cardColor = remember {
+                                        colorList.random()
+                                    }
+                                    CategoryCard(category, cardColor) {
                                         navigator.push(CategoryDrinksScreen(category))
                                     }
                                 }
@@ -169,7 +169,7 @@ object HomeScreen : Screen, KoinComponent {
                                                         getIngredientImage(name),
                                                     ),
                                                     "ingredient image",
-                                                    modifier = Modifier.size(100.dp)
+                                                    modifier = Modifier.size(100.dp),
                                                 )
 
                                                 Text(name, modifier = Modifier.size(100.dp), textAlign = TextAlign.Center)
