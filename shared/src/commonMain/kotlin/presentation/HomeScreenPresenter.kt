@@ -1,6 +1,5 @@
 package presentation
 
-import data.network.dto.ingredients.IngredientModel
 import domain.models.DrinkModel
 import domain.sources.HomeScreenSource
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +17,7 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
     private var categoriesJob: Job? = null
     private var randomDrinkJob: Job? = null
-    private var drinkCategoriesJob : Job? = null
+    private var drinkCategoriesJob: Job? = null
     private var ingredientsJob: Job? = null
 
     private val _categoriesState = MutableStateFlow(CategoriesState())
@@ -32,13 +31,13 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
     val categoryDrinkState
         get() = _categoryDrinkState.asStateFlow()
 
-
     private val _ingredientStates = MutableStateFlow<IngredientStates>(IngredientStates.Idle)
     val ingredientStates
         get() = _ingredientStates.asStateFlow()
 
-
-
+    init {
+        getHomeScreenItems()
+    }
 
     fun getHomeScreenItems() {
         fetchCockTailCategories()
@@ -46,17 +45,16 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
         fetchIngredientList()
     }
 
-    fun fetchIngredientList(){
+    fun fetchIngredientList() {
         ingredientsJob?.cancel()
         _ingredientStates.value = IngredientStates.Loading
         ingredientsJob = scope.launch {
             homeScreenSource.getAllIngredientsList().onSuccess {
-                _ingredientStates.value = IngredientStates.Success(it)
+             _ingredientStates.value = IngredientStates.Success(it)
             }.onFailure {
                 _ingredientStates.value = IngredientStates.Failure(it.getMessage())
             }
         }
-
     }
     fun fetchTodayDrink() {
         randomDrinkJob?.cancel()
@@ -87,7 +85,7 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
         }
     }
 
-    fun getDrinksInCategory(category: String){
+    fun getDrinksInCategory(category: String) {
         _categoryDrinkState.value = CategoryDrinkState.Loading
         drinkCategoriesJob?.cancel()
         drinkCategoriesJob = scope.launch {
@@ -98,8 +96,6 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
             }
         }
     }
-
-
 }
 
 data class CategoriesState(
@@ -118,17 +114,16 @@ sealed class CategoryDrinkState {
     object Loading : CategoryDrinkState()
     object Idle : CategoryDrinkState()
 
-    data class Success (val drinks : List<DrinkModel>) : CategoryDrinkState()
+    data class Success(val drinks: List<DrinkModel>) : CategoryDrinkState()
 
-    data class Failure (val errorMessage: String) : CategoryDrinkState()
-
+    data class Failure(val errorMessage: String) : CategoryDrinkState()
 }
 
-sealed class IngredientStates{
+sealed class IngredientStates {
     object Loading : IngredientStates()
     object Idle : IngredientStates()
 
-    data class Success (val ingredients : List<String>) : IngredientStates()
+    data class Success(val ingredients: List<String>) : IngredientStates()
 
-    data class Failure (val errorMessage: String) : IngredientStates()
+    data class Failure(val errorMessage: String) : IngredientStates()
 }
