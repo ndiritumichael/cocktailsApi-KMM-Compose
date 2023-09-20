@@ -70,7 +70,7 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                 modifier = Modifier.fillMaxSize().padding(it),
                 contentAlignment = Alignment.TopCenter,
             ) {
-                AnimatedVisibility(drinkState.isLoading) {
+                AnimatedVisibility(drinkState.isLoading, modifier = Modifier.align(Alignment.TopCenter)) {
                     CircularProgressIndicator(modifier = Modifier.size(50.dp))
                 }
                 drinkState.errorMessage?.let { error ->
