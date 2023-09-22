@@ -2,16 +2,13 @@ package screens.ingredientDrinks
 
 import domain.models.DrinkModel
 
-class IngredientDrinkPresenter {
-}
+class IngredientDrinkPresenter()
 
-sealed class  IngredientDrinkState {
-     object  Idle
-    object Loading
+sealed class IngredientDrinkState {
+    object Idle : IngredientDrinkState()
+    object Loading : IngredientDrinkState()
 
-    data class Success(val drinks: DrinkModel)
+    data class Success(val drinks: DrinkModel) : IngredientDrinkState()
 
-    data class Failure(val errorMessage : String)
-
-
+    data class Failure(val errorMessage: String) : IngredientDrinkState()
 }
