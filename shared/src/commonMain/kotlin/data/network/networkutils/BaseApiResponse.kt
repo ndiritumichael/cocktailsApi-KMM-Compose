@@ -27,9 +27,35 @@ abstract class BaseApiResponse {
             return Result.failure(Exception(" Something went Wrong : ${e.message}"))
         }
     }
+    suspend inline fun <reified T> safeIngredientsApiCall(apiCall: () -> HttpResponse): Result<T> {
+        return try {
+            val response = apiCall()
+            if (response.status == HttpStatusCode.OK) {
+                val data: IngredientDTOHolder<T> = response.body()
+                if (data.drinkingredients != null) {
+                    Result.success(data.drinkingredients)
+                } else {
+                    Result.failure(Exception("Could Not Find any Drinks"))
+                }
+            } else {
+                val data = response.body<String>()
+// TODO: Handle errors more granularly
+                Result.failure(Exception(" Something went Wrong : \n $data"))
+            }
+        } catch (e: Exception) {
+            return Result.failure(Exception(" Something went Wrong : ${e.message}"))
+        }
+    }
+
+
 }
 
 @Serializable
 data class GenericDTOHolder<T>(
     @Serializable val drinks: T?,
+)
+
+@Serializable
+data class IngredientDTOHolder<T>(
+    @Serializable val drinkingredients: T?,
 )
