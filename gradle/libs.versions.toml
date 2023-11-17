@@ -1,5 +1,5 @@
 [versions]
-androidxActivity = "1.7.2"
+androidxActivity = "1.8.0"
 androidxComposeBom = "2023.08.00"
 androidxComposeCompiler = "1.4.5"
 androidGradlePlugin = "7.4.1"
@@ -8,12 +8,13 @@ appcompat = "1.6.1"
 coil-compose = "2.2.2"
 compose-ratingBar = "1.2.4"
 compose-lifecycle-runtime = "2.6.0-alpha01"
-coreKtx = "1.10.1"
+coreKtx = "1.12.0"
 detekt = "1.22.0-RC2"
 kamelImage = "0.7.2"
-kotlin_version = "1.8.20"
-koin = "3.4.2"
-koin_android_version= "3.4.0"
+kmpalette = "2.0.3"
+kotlin_version = "1.9.10"
+koin = "3.5.0"
+koin_android_version= "3.5.0"
 ktLint = "10.3.0"
 ktorVersion = "2.3.3"
 landscapist-coil = "2.1.0"
@@ -26,7 +27,7 @@ multiplatform-settings = "1.0.0"
 pagingCompose = "1.0.0-alpha17"
 sqlDelightVersion= "1.5.5"
 
-voyager = "1.0.0-rc05"
+voyager = "1.0.0-rc08"
 
 
 
@@ -71,6 +72,13 @@ ktor-client-logging = { group = "io.ktor" , name = "ktor-client-logging" ,versio
 ktor-client-contentNegotiation = { group = "io.ktor" , name = "ktor-client-content-negotiation" ,version.ref = "ktorVersion"}
 ktor-client-json = { group = "io.ktor" , name = "ktor-serialization-kotlinx-json" ,version.ref = "ktorVersion"}
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx" ,name = "kotlinx-serialization-json",version.ref = "kotlinxSerialization"}
+
+
+kmpalette-core = { module = "com.kmpalette:kmpalette-core", version.ref = "kmpalette" }
+# Optional source libraries
+kmpalette-extensions-base64 = { module = "com.kmpalette:extensions-base64", version.ref = "kmpalette" }
+kmpalette-extensions-network = { module = "com.kmpalette:extensions-network", version.ref = "kmpalette" }
+
 sqldelight-runtime = { group = "com.squareup.sqldelight", name = "runtime", version.ref = "sqlDelightVersion"}
 sqldelight-android-driver= { group = "com.squareup.sqldelight", name = "android-driver", version.ref = "sqlDelightVersion"}
 sqldelight-native-driver= { group = "com.squareup.sqldelight", name = "native-driver", version.ref = "sqlDelightVersion"}

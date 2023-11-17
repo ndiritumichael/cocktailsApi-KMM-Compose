@@ -1,16 +1,19 @@
-package data.sources
+package data.networksource
 
 import data.network.UrlRoutes
 import data.network.dto.drinkDto.CategoryDrinkDTO
 import data.network.dto.drinkDto.CategoryDto
 import data.network.dto.drinkDto.DrinkDTOItem
-import data.network.dto.ingredients.IngredientModel
+import data.network.dto.ingredients.IngredientDTO
+import data.network.dto.ingredients.IngredientDetailDTO
 import data.network.networkutils.BaseApiResponse
+import data.network.networkutils.GenericDrinkDTOHolder
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
-class HomeService(private val client: HttpClient) : BaseApiResponse() {
+class CocktailService(private val client: HttpClient) : BaseApiResponse() {
 
     suspend fun getRandomCockTail(): Result<List<DrinkDTOItem>> {
         return safeApiCall {
@@ -32,10 +35,23 @@ class HomeService(private val client: HttpClient) : BaseApiResponse() {
         }
     }
 
-    suspend fun getIngredientList(): Result<List<IngredientModel>> {
+    suspend fun getIngredientList(): Result<List<IngredientDTO>> {
         return safeApiCall {
             client.get(UrlRoutes.ListIngredients.path)
         }
     }
 
+    suspend fun getIngredientData(name: String): IngredientDetailDTO {
+        return client.get(UrlRoutes.GetDrinkbyIngredient.path) {
+            parameter(UrlRoutes.GetDrinkbyIngredient.queryKey!!, name)
+        }.body()
+    }
+
+    suspend fun searchDrinkbyIngredient(name: String): GenericDrinkDTOHolder<List<CategoryDrinkDTO>> {
+        with(UrlRoutes.FilterbyIngredient) {
+            return client.get(path) {
+                parameter(queryKey!!, name)
+            }.body()
+        }
+    }
 }

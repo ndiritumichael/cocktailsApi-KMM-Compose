@@ -1,4 +1,4 @@
-package data.sources
+package data.networksource
 
 import data.network.UrlRoutes
 import data.network.dto.drinkDto.DrinkDTOItem
@@ -25,6 +25,4 @@ class SearchService(private val client: HttpClient) : BaseApiResponse() {
             }
         }
     }
-
-
 }

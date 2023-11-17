@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
@@ -31,24 +32,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.kmpalette.loader.rememberNetworkLoader
+import com.kmpalette.rememberDominantColorState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import io.ktor.http.Url
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.HomeScreenPresenter
 import presentation.IngredientStates
 import screens.categoryDrinks.CategoryDrinksScreen
 import screens.drinkDetailsScreen.DrinksDetailScreen
+import screens.ingredientDetails.IngredientDetailScreen
 import screens.searchScreen.CockTailCard
 import screens.searchScreen.SearchScreen
 import screens.uiutils.getIngredientImage
@@ -60,19 +65,18 @@ object HomeScreen : Screen, KoinComponent {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
+        val networkLoader = rememberNetworkLoader()
+        val dominantColor = rememberDominantColorState(networkLoader)
         val categoriesState by presenter.categories.collectAsState()
         val randomDrink by presenter.topDrinkState.collectAsState()
         val ingredients by presenter.ingredientStates.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
         val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-        LaunchedEffect(true) {
-            presenter.getHomeScreenItems()
-        }
         Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
+            //  modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
             topBar = {
-                TopAppBar(title = { Text("Kakashi Cocktails") }, actions = {
+                TopAppBar(title = { Text("Welcome") }, actions = {
                     IconButton(onClick = {
                         navigator.push(SearchScreen)
                     }) {
@@ -87,26 +91,39 @@ object HomeScreen : Screen, KoinComponent {
             },
         ) {
             Box(modifier = Modifier.padding(it).fillMaxSize()) {
-                if (categoriesState.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.TopCenter))
-                }
-
-                categoriesState.errorMessage?.let { error ->
-                    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(error, color = Color.Red)
-                        Button({
-                            presenter
-                                .fetchCockTailCategories()
-                        }) {
-                            Text("Retry")
-                        }
-                    }
-                }
-
                 LazyColumn(
 
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
                 ) {
+                    if (categoriesState.isLoading) {
+                        item {
+                            Card(modifier = Modifier.height(400.dp).fillMaxWidth().padding(8.dp)) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+                    }
+
+                    item {
+                        categoriesState.errorMessage?.let { error ->
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Text(error, color = Color.Red)
+                                Button({
+                                    presenter
+                                        .fetchCockTailCategories()
+                                }) {
+                                    Text("Retry")
+                                }
+                            }
+                        }
+                    }
                     randomDrink.drink?.let { drink ->
                         item {
                             Box(modifier = Modifier.fillMaxWidth()) {
@@ -120,59 +137,94 @@ object HomeScreen : Screen, KoinComponent {
                                         Alignment.TopCenter,
                                     ),
                                     fontWeight = FontWeight.ExtraBold,
-                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    color = dominantColor.onColor,
                                 )
                             }
                         }
                     }
 
-                    if (categoriesState.categories.isNotEmpty()) {
-                        item {
-                            Text("Explore Categories", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp))
-                        }
-                        item {
-                            LazyHorizontalGrid(
-                                rows = GridCells.Fixed(2),
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).height(360.dp),
-                            ) {
-                                items(categoriesState.categories) { category ->
-                                    CategoryCard(category, colorList.random()) {
-                                        navigator.push(CategoryDrinksScreen(category))
-                                    }
+                    item {
+                        Text(
+                            "Explore Categories",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(8.dp),
+                        )
+                    }
+                    item {
+                        LazyHorizontalGrid(
+                            rows = GridCells.Fixed(2),
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                                .height(360.dp),
+                        ) {
+                            if (categoriesState.isLoading) {
+                                items(20) {
+                                    LoadingCategoryCard()
+                                }
+                            }
+                            itemsIndexed(categoriesState.categories) { index, category ->
+                                val cardColor = remember {
+                                    CategoryColors.getColor(index)
+                                }
+                                CategoryCard(category, cardColor) {
+                                    navigator.push(
+                                        CategoryDrinksScreen(
+                                            category,
+                                            categoriesState.categories,
+                                        ),
+                                    )
                                 }
                             }
                         }
                     }
 
                     item {
-                        Text("Explore Ingredients", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(8.dp))
+                        Text(
+                            "Explore Ingredients",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(8.dp),
+                        )
                     }
 
-                    when (val ingredients = ingredients) {
+                    when (val ingredientStates = ingredients) {
                         is IngredientStates.Failure -> {
                         }
+
                         IngredientStates.Idle -> {}
                         IngredientStates.Loading -> {
                         }
+
                         is IngredientStates.Success -> {
                             item {
                                 LazyHorizontalGrid(
                                     rows = GridCells.Fixed(2),
-                                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).height(300.dp),
+                                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                                        .height(300.dp),
                                 ) {
-                                    items(ingredients.ingredients) { name ->
-                                        Card(modifier = Modifier.height(150.dp).padding(4.dp)) {
-                                            Column(modifier = Modifier.padding(8.dp).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
+                                    items(ingredientStates.ingredients) { name ->
+                                        Card(
+                                            modifier = Modifier.height(150.dp).padding(4.dp),
+                                            onClick = {
+                                                navigator.push(IngredientDetailScreen(557, name))
+                                            },
+                                        ) {
+                                            Column(
+                                                modifier = Modifier.padding(8.dp).fillMaxHeight(),
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                            ) {
                                                 KamelImage(
 
                                                     asyncPainterResource(
                                                         getIngredientImage(name),
                                                     ),
                                                     "ingredient image",
-                                                    modifier = Modifier.size(100.dp)
+                                                    modifier = Modifier.size(100.dp),
                                                 )
 
-                                                Text(name, modifier = Modifier.size(100.dp), textAlign = TextAlign.Center)
+                                                Text(
+                                                    name,
+                                                    modifier = Modifier.size(100.dp),
+                                                    textAlign = TextAlign.Center,
+                                                )
                                             }
                                         }
                                     }
@@ -183,14 +235,28 @@ object HomeScreen : Screen, KoinComponent {
                 }
             }
         }
+
+        LaunchedEffect(randomDrink.drink) {
+            randomDrink.drink?.let {
+                dominantColor.updateFrom(Url(it.drinkImage))
+            }
+        }
     }
 }
 
-val colorList = listOf(
+object CategoryColors {
 
-    Color.Red,
-    Color.Green,
-    Color.Magenta,
-    Color.Blue,
+    private val colorList = listOf(
 
-)
+        Color.Red,
+        Color.Green,
+        Color.Magenta,
+        Color.Blue,
+
+    )
+
+    fun getColor(index: Int): Color {
+        val colorIndex = index % 4
+        return colorList[colorIndex]
+    }
+}

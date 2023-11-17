@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IngredientModel(
-    @SerialName("strIngredient1")
-    val strIngredient1: String
+data class IngredientDetailDTO(
+    @SerialName("ingredients")
+    val ingredients: List<Ingredient>
 )

@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,24 +54,30 @@ object SearchScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
 
-        Scaffold(topBar = {
-            CustomSearchBar(value = searchtext, placeholder = "Search Cocktails", navigateUp = {
-                navigator.pop()
-            }, onValueChange = {
-                // searchtext = it
-                presenter.changeSearchString(it)
-            })
-        }, modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection)) { paddingValues ->
+        Scaffold(
+            topBar = {
+                CustomSearchBar(value = searchtext, placeholder = "Search Cocktails", navigateUp = {
+                    navigator.pop()
+                }, onValueChange = {
+                    // searchtext = it
+                    presenter.changeSearchString(it)
+                })
+            },
+            modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
+        ) { paddingValues ->
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-                CocktailListGrid(searchUiState.data) {
-                    navigator.push(DrinksDetailScreen(it))
+                CocktailListGrid(drinks = searchUiState.data) { index, drink ->
+                    navigator.push(DrinksDetailScreen(drink))
                 }
 
                 searchUiState.errorMessage?.let {
                     Text(it, color = Color.Red)
                 }
 
-                AnimatedVisibility(searchUiState.isLoading, modifier = Modifier.align(Alignment.TopCenter)) {
+                AnimatedVisibility(
+                    searchUiState.isLoading,
+                    modifier = Modifier.align(Alignment.TopCenter),
+                ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(50.dp),
@@ -91,11 +97,20 @@ object SearchScreen : Screen, KoinComponent {
 }
 
 @Composable
-fun CocktailListGrid(drinks: List<DrinkModel>, gridWidthItems: Int = 2, onClick: (id: String) -> Unit) {
-    LazyVerticalGrid(columns = GridCells.Fixed(gridWidthItems), contentPadding = PaddingValues(4.dp)) {
-        items(drinks) {
-            CockTailCard(it) {
-                onClick(it.id)
+fun CocktailListGrid(
+    modifier: Modifier = Modifier,
+    drinks: List<DrinkModel>,
+    gridWidthItems: Int = 2,
+    onClick: (index: Int, id: String) -> Unit,
+) {
+    LazyVerticalGrid(
+        modifier = modifier,
+        columns = GridCells.Fixed(gridWidthItems),
+        contentPadding = PaddingValues(4.dp),
+    ) {
+        itemsIndexed(drinks) { index, drink ->
+            CockTailCard(drink) {
+                onClick(index, drink.id)
             }
         }
     }
@@ -109,26 +124,51 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
         }.fillMaxWidth().height(imageHeight),
     ) {
         Box() {
-            KamelImage(asyncPainterResource(drink.drinkImage), modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds, onLoading = { progress ->
-                Box(modifier = Modifier.background(Color.LightGray).height(imageHeight).fillMaxWidth()) {
+            KamelImage(
+                asyncPainterResource(drink.drinkImage),
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
+                onLoading = { progress ->
 
-                    CircularProgressIndicator(
-                        progress = progress,
-                        modifier = Modifier.align(Alignment.Center),
-                        color = Color.Magenta,
-                    )
-                }
-            }, contentDescription = null)
+                    Card(modifier = Modifier.height(400.dp).fillMaxWidth().padding(8.dp)) {
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator(
+                                progress = progress,
+                                modifier = Modifier.align(Alignment.Center),
+                                color = Color.Magenta,
+                            )
+                        }
+                    }
+//                    Box(
+//                        modifier = Modifier.background(Color.LightGray).height(imageHeight)
+//                            .fillMaxWidth(),
+//                    ) {
+//                        CircularProgressIndicator(
+//                            progress = progress,
+//                            modifier = Modifier.align(Alignment.Center),
+//                            color = Color.Magenta,
+//                        )
+//                    }
+                },
+                contentDescription = null,
+            )
 
             Box(
                 modifier = Modifier.height(imageHeight).fillMaxWidth().background(
-                    brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(0.5f), Color.Black)),
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            Color.Transparent,
+                            Color.Black.copy(0.5f),
+                            Color.Black,
+                        ),
+                    ),
                 ).align(Alignment.BottomCenter),
 
             ) {
                 Text(
                     drink.name,
-                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(bottom = 10.dp),
+                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
+                        .padding(bottom = 10.dp),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,

@@ -80,6 +80,14 @@
 			path = details;
 			sourceTree = "<group>";
 		};
+		6B8F2992B9B8EAA94628B137 /* xcschemes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = xcschemes;
+			path = iosApp.xcworkspace/xcuserdata/ndiritu.xcuserdatad/xcschemes;
+			sourceTree = "<group>";
+		};
 		7555FF72242A565900829871 = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +96,7 @@
 				7555FF7C242A565900829871 /* Products */,
 				FEFF387C0A8D172AA4D59CAE /* Pods */,
 				42799AB246E5F90AF97AA0EF /* Frameworks */,
+				6B8F2992B9B8EAA94628B137 /* xcschemes */,
 			);
 			sourceTree = "<group>";
 		};

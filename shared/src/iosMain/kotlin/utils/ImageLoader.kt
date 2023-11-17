@@ -1,5 +1,3 @@
-
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -15,7 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import utils.ImageUtils
 
 @Composable
-actual fun AsyncImage(
+fun AsyncImage(
     imageUrl: String,
     loadingPlaceHolder: @Composable BoxScope.() -> Unit,
     errorPlaceHolder: @Composable BoxScope.() -> Unit,
@@ -30,8 +28,8 @@ actual fun AsyncImage(
     val imageState by rememberImageState(imageUrl)
     Box(modifier = modifier) {
         when (val state = imageState) {
-           ImageState.Error -> errorPlaceHolder()
-           ImageState.Loading -> loadingPlaceHolder()
+            ImageState.Error -> errorPlaceHolder()
+            ImageState.Loading -> loadingPlaceHolder()
             is ImageState.Success -> {
                 Image(
                     bitmap = state.bitmap,
@@ -44,7 +42,6 @@ actual fun AsyncImage(
                     filterQuality = filterQuality,
                 )
             }
-
         }
     }
 }
