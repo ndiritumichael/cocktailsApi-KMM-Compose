@@ -1,6 +1,6 @@
 package domain.sources
 
-import data.sources.SearchService
+import data.networksource.SearchService
 import domain.models.DrinkDetailModel
 import domain.models.DrinkModel
 import domain.models.mapper.toDrinkDetailModel
