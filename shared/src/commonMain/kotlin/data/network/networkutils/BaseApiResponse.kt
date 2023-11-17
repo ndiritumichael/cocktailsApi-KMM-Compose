@@ -3,6 +3,7 @@ package data.network.networkutils
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
+import io.ktor.utils.io.CancellationException
 import kotlinx.serialization.Serializable
 
 abstract class BaseApiResponse {
@@ -12,7 +13,7 @@ abstract class BaseApiResponse {
         return try {
             val response = apiCall()
             if (response.status == HttpStatusCode.OK) {
-                val data: GenericDTOHolder<T> = response.body()
+                val data: GenericDrinkDTOHolder<T> = response.body()
                 if (data.drinks != null) {
                     Result.success(data.drinks)
                 } else {
@@ -24,9 +25,11 @@ abstract class BaseApiResponse {
                 Result.failure(Exception(" Something went Wrong : \n $data"))
             }
         } catch (e: Exception) {
-            return Result.failure(Exception(" Something went Wrong : ${e.message}"))
+            if (e is CancellationException) throw e 
+            Result.failure(Exception(" Something went Wrong : ${e.message}"))
         }
     }
+
     suspend inline fun <reified T> safeIngredientsApiCall(apiCall: () -> HttpResponse): Result<T> {
         return try {
             val response = apiCall()
@@ -46,12 +49,10 @@ abstract class BaseApiResponse {
             return Result.failure(Exception(" Something went Wrong : ${e.message}"))
         }
     }
-
-
 }
 
 @Serializable
-data class GenericDTOHolder<T>(
+data class GenericDrinkDTOHolder<T>(
     @Serializable val drinks: T?,
 )
 
