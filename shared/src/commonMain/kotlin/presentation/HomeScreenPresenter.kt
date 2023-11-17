@@ -50,7 +50,7 @@ class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : Koin
         _ingredientStates.value = IngredientStates.Loading
         ingredientsJob = scope.launch {
             homeScreenSource.getAllIngredientsList().onSuccess {
-             _ingredientStates.value = IngredientStates.Success(it)
+                _ingredientStates.value = IngredientStates.Success(it.sorted())
             }.onFailure {
                 _ingredientStates.value = IngredientStates.Failure(it.getMessage())
             }

@@ -1,11 +1,11 @@
 package domain.sources
 
-import data.sources.HomeService
+import data.networksource.CocktailService
 import domain.models.DrinkModel
 import domain.models.mapper.toDrinkModel
 import utils.toModelResult
 
-class HomeDrinksRepository(private val api: HomeService) : HomeScreenSource {
+class HomeDrinksRepository(private val api: CocktailService) : HomeScreenSource {
     override suspend fun getCockTailoftheDay(): Result<DrinkModel> {
         return api.getRandomCockTail().toModelResult {
             it.first().toDrinkModel()
@@ -34,5 +34,9 @@ class HomeDrinksRepository(private val api: HomeService) : HomeScreenSource {
                 it.strIngredient1
             }
         }
+    }
+
+    override suspend fun getIngredientDrinks(ingredient: String): Result<List<DrinkModel>> {
+        return Result.success(emptyList())
     }
 }
