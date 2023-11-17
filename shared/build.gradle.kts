@@ -7,7 +7,14 @@ plugins {
 }
 
 kotlin {
-    android()
+    applyDefaultHierarchyTemplate()
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
+        }
+    }
 
     iosX64()
     iosArm64()
@@ -28,7 +35,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-               implementation(libs.kamel.image)
+                implementation(libs.kamel.image)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
@@ -49,6 +56,9 @@ kotlin {
                 implementation(libs.sqldelight.runtime)
                 implementation(libs.multiplatform.settings)
                 implementation(libs.multiplatform.settings.coroutines)
+
+                implementation(libs.kmpalette.core)
+                implementation(libs.kmpalette.extensions.network)
             }
         }
         val androidMain by getting {
@@ -68,7 +78,7 @@ kotlin {
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
-        val iosMain by creating {
+        val iosMain by getting {
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
@@ -102,3 +112,4 @@ android {
         jvmToolchain(11)
     }
 }
+
