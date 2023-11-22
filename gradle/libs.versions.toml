@@ -20,6 +20,7 @@ ktorVersion = "2.3.3"
 landscapist-coil = "2.1.0"
 lifecycle-runtime = "2.6.1"
 napierVersion = "2.6.1"
+kotlinxCoroutines = "1.7.3"
 kotlinxSerialization = "1.5.1"
 kmm-paging = "3.1.1-0.1.0"
 kuurtPaging = "0.4.7"
@@ -28,6 +29,7 @@ pagingCompose = "1.0.0-alpha17"
 sqlDelightVersion= "1.5.5"
 
 voyager = "1.0.0-rc08"
+org-jetbrains-kotlin-jvm = "1.9.0"
 
 
 
@@ -64,6 +66,8 @@ koin-core = { group = "io.insert-koin", name = "koin-core" , version.ref = "koin
 koin-test = { group = "io.insert-koin", name = "koin-test" , version.ref = "koin"}
 koin-android = { group = "io.insert-koin", name = "koin-android" , version.ref = "koin_android_version"}
 koin-android-compose = { group = "io.insert-koin", name = "koin-androidx-compose" , version.ref = "koin_android_version"}
+
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 
 ktor-client-core = { group = "io.ktor" , name = "ktor-client-core" ,version.ref = "ktorVersion"}
 ktor-client-okhttp = { group = "io.ktor" , name = "ktor-client-okhttp" ,version.ref = "ktorVersion"}
@@ -110,3 +114,4 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 tools-detekt = { id = "io.gitlab.arturbosch.detekt",version.ref = "detekt" }
 tools-klint = {id = "org.jlleitschuh.gradle.ktlint" , version.ref = "ktLint"}
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
