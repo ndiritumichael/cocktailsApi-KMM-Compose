@@ -5,6 +5,7 @@ import domain.models.DrinkModel
 import domain.sources.SearchDrinksSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,7 @@ import org.koin.core.component.KoinComponent
 
 class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinComponent {
 
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
     private var job: Job? = null
     private var detailJob: Job? = null
 
@@ -72,7 +73,6 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
         // searchDrinks(_searchText.value)
     }
 }
-
 
 data class SearchScreenState(
 

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,7 +24,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +40,7 @@ fun CategoryCard(name: String, color: Color, onCategoryClicked: () -> Unit) {
             Text(name, modifier = Modifier.align(Alignment.Center), fontWeight = FontWeight.ExtraBold)
 
             Image(
-                painterResource("cocktailsvg.xml"),
+                imageVector = Icons.Default.Settings,
                 null,
                 colorFilter = ColorFilter.tint(color),
                 modifier = Modifier.size(50.dp).align(Alignment.BottomEnd).padding(bottom = 10.dp, end = 10.dp),
