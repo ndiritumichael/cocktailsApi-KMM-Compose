@@ -4,6 +4,7 @@ import domain.models.DrinkModel
 import domain.sources.HomeScreenSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +15,7 @@ import utils.getMessage
 
 class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : KoinComponent {
 
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
     private var categoriesJob: Job? = null
     private var randomDrinkJob: Job? = null
     private var drinkCategoriesJob: Job? = null

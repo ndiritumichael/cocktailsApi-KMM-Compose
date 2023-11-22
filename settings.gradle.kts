@@ -2,6 +2,7 @@ rootProject.name = "CockTails-KMM"
 
 include(":androidApp")
 include(":shared")
+include(":cocktailsDesktop")
 
 pluginManagement {
     repositories {

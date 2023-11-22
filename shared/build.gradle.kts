@@ -20,6 +20,17 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    jvm {
+
+        sourceSets["commonMain"].resources.srcDirs("src/commonMain/resources")
+    }
+    sourceSets {
+        named("commonMain") {
+            resources.srcDirs("resources")
+            // other parts
+        }
+    }
+
     cocoapods {
         version = "1.0.0"
         summary = "Some description for the Shared Module"
@@ -59,6 +70,8 @@ kotlin {
 
                 implementation(libs.kmpalette.core)
                 implementation(libs.kmpalette.extensions.network)
+
+                implementation(libs.kotlinx.coroutines)
             }
         }
         val androidMain by getting {
@@ -89,6 +102,14 @@ kotlin {
                 implementation(libs.ktor.client.darwin)
             }
         }
+
+        val jvmMain by getting {
+
+            dependencies {
+
+                implementation(libs.ktor.client.okhttp)
+            }
+        }
     }
 }
 
@@ -112,4 +133,3 @@ android {
         jvmToolchain(11)
     }
 }
-
