@@ -73,7 +73,7 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
     @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val drinkState = presenter.drinkDetailState.collectAsState().value
+        val drinkState by presenter.drinkDetailState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
 
         var selectedLanguageIndex by remember { mutableStateOf(0) }
@@ -153,6 +153,7 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                                             modifier = Modifier.width(100.dp),
                                             textAlign = TextAlign.Center,
                                             style = MaterialTheme.typography.labelLarge,
+                                            maxLines = 1,
                                         )
                                         Text(
                                             ingredient.measurements,

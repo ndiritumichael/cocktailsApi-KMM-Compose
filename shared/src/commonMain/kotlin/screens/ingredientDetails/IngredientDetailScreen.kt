@@ -34,7 +34,6 @@ import com.kmpalette.rememberPaletteState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import io.ktor.http.Url
-
 import kotlinx.coroutines.delay
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -61,7 +60,6 @@ data class IngredientDetailScreen(val id: Int, val name: String) : Screen, KoinC
         val maxLines: Int by animateIntAsState(if (expandedDetails) 100 else 3)
 
         LaunchedEffect(true) {
-            println("the max lines is ${Int.MAX_VALUE}")
             presenter.getIngredientDetails(id, name)
         }
 
