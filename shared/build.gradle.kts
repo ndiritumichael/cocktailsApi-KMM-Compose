@@ -46,6 +46,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(libs.multiplatform.settings)
                 implementation(libs.kamel.image)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
