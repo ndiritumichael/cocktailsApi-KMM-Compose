@@ -1,4 +1,4 @@
-package data.network.networkutils
+package data.networksource.network.networkutils
 
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse

@@ -1,4 +1,4 @@
-package data.network.dto.drinkDto
+package data.networksource.network.dto.drinkDto
 
 import kotlinx.serialization.Serializable
 

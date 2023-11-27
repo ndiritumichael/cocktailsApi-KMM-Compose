@@ -1,4 +1,4 @@
-package data.network
+package data.networksource.network
 
 enum class UrlRoutes(val path: String, val queryKey: String? = null) {
 

@@ -1,4 +1,4 @@
-package data.network.dto.ingredients
+package data.networksource.network.dto.ingredients
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

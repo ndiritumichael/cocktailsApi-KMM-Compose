@@ -1,6 +1,6 @@
 package di
 
-import data.network.apiClient
+import data.networksource.network.apiClient
 import data.networksource.CocktailService
 import data.networksource.SearchService
 import domain.repository.IngredientsSourceImpl

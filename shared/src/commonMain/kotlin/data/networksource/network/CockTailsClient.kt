@@ -1,4 +1,4 @@
-package data.network
+package data.networksource.network
 
 import Constants
 import io.ktor.client.HttpClient

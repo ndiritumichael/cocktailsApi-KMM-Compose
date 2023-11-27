@@ -1,7 +1,7 @@
 package domain.models.mapper
 
-import data.network.dto.drinkDto.CategoryDrinkDTO
-import data.network.dto.drinkDto.DrinkDTOItem
+import data.networksource.network.dto.drinkDto.CategoryDrinkDTO
+import data.networksource.network.dto.drinkDto.DrinkDTOItem
 import domain.models.DrinkDetailModel
 import domain.models.DrinkIngredientsModel
 import domain.models.DrinkInstructionLanguages
