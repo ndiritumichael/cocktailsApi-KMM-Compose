@@ -2,4 +2,6 @@ package data.preferences
 
 import com.russhwolf.settings.Settings
 
-expect fun createSettings(): Settings
+expect class SettingWrapper {
+    fun createSettings(): Settings
+}

@@ -5,8 +5,12 @@ import android.content.Context
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
 
-actual fun createSettings(context : Context): Settings {
-    val delegate = context.getSharedPreferences("bloom_preferences", Context.MODE_PRIVATE)
 
-return
+actual class SettingWrapper(private val context: Context) {
+    actual fun createSettings(): Settings {
+
+        val delegate = context.getSharedPreferences("cocktail_preferences", Context.MODE_PRIVATE)
+
+        return SharedPreferencesSettings(delegate)
+    }
 }
