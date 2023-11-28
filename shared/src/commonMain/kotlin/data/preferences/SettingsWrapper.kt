@@ -1,7 +1,7 @@
 package data.preferences
 
-import com.russhwolf.settings.Settings
+import com.russhwolf.settings.ObservableSettings
 
 expect class SettingWrapper {
-    fun createSettings(): Settings
+    fun createSettings(): ObservableSettings
 }

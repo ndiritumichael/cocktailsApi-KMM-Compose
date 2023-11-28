@@ -21,11 +21,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +38,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import domain.models.DrinkModel
+import io.github.aakira.napier.Napier
+import io.kamel.core.Resource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import org.koin.core.component.KoinComponent
@@ -118,6 +122,26 @@ fun CocktailListGrid(
 
 @Composable
 fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Unit) {
+    val painter = asyncPainterResource(drink.drinkImage)
+
+    LaunchedEffect(painter){
+        when(painter){
+            is Resource.Failure -> {}
+            is Resource.Loading -> {}
+            is Resource.Success -> {
+                val data = painter.value
+
+                if (data is BitmapPainter){
+                    val bitmap = data
+                }
+
+                Napier.d {
+                    "The data that is held is $data"
+                }
+            }
+        }
+
+    }
     Card(
         modifier = Modifier.padding(8.dp).clickable {
             onClick()
@@ -125,9 +149,10 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
     ) {
         Box() {
             KamelImage(
-                asyncPainterResource(drink.drinkImage),
+                painter
+               ,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.FillHeight,
                 onLoading = { progress ->
 
                     Card(modifier = Modifier.height(400.dp).fillMaxWidth().padding(8.dp)) {
