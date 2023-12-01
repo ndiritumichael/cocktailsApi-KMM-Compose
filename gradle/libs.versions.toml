@@ -29,6 +29,7 @@ multiplatform-settings = "1.1.1"
 pagingCompose = "1.0.0-alpha17"
 sqlDelightVersion= "1.5.5"
 
+themeMaterial3 = "0.6.0"
 voyager = "1.0.0-rc08"
 org-jetbrains-kotlin-jvm = "1.9.0"
 
@@ -97,6 +98,7 @@ multiplatform-paging = { group = "io.github.kuuuurt", name  = "multiplatform-pag
 multiplatform-settings = { group = "com.russhwolf" , name = "multiplatform-settings" , version.ref = "multiplatform-settings"}
 multiplatform-settings-coroutines = { group = "com.russhwolf" , name = "multiplatform-settings-coroutines" , version.ref = "multiplatform-settings"}
 
+theme-material3 = { module = "io.github.softartdev:theme-material3", version.ref = "themeMaterial3" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }

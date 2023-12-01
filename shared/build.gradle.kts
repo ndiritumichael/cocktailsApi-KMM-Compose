@@ -55,6 +55,8 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
+             //   implementation(libs.theme.material3)
+
                 implementation(libs.voyager.navigator)
 
                 api(libs.koin.core)
