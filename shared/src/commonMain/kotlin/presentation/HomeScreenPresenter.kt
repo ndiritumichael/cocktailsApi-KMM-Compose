@@ -1,5 +1,7 @@
 package presentation
 
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import domain.models.DrinkModel
 import domain.sources.HomeScreenSource
 import kotlinx.coroutines.CoroutineScope
@@ -13,9 +15,9 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import utils.getMessage
 
-class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : KoinComponent {
+class HomeScreenPresenter(private val homeScreenSource: HomeScreenSource) : KoinComponent,ScreenModel {
 
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    private val scope: CoroutineScope = screenModelScope
     private var categoriesJob: Job? = null
     private var randomDrinkJob: Job? = null
     private var drinkCategoriesJob: Job? = null
