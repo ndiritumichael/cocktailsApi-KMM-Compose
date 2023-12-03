@@ -37,11 +37,16 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.kmpalette.loader.rememberNetworkLoader
+import com.kmpalette.rememberDominantColorState
+import com.kmpalette.rememberPaletteState
 import domain.models.DrinkModel
 import io.github.aakira.napier.Napier
 import io.kamel.core.Resource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+
+import io.ktor.http.Url
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import presentation.DrinksSearchPresenter
@@ -109,7 +114,7 @@ fun CocktailListGrid(
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(gridWidthItems),
+        columns = GridCells.Adaptive(200.dp),
         contentPadding = PaddingValues(4.dp),
     ) {
         itemsIndexed(drinks) { index, drink ->
@@ -123,6 +128,19 @@ fun CocktailListGrid(
 @Composable
 fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Unit) {
     val painter = asyncPainterResource(drink.drinkImage)
+    val networkLoader = rememberNetworkLoader()
+    val dominantPal = rememberDominantColorState(loader = networkLoader)
+
+    val gradient = Brush.radialGradient(
+        listOf(
+            Color.Transparent,
+
+            dominantPal.color.copy(alpha = 0.5f),
+            dominantPal.color,
+        ),
+    )
+
+
 
     LaunchedEffect(painter){
         when(painter){
@@ -142,12 +160,17 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
         }
 
     }
+
+    LaunchedEffect(painter){
+       dominantPal.updateFrom (Url(drink.drinkImage))
+
+    }
     Card(
         modifier = Modifier.padding(8.dp).clickable {
             onClick()
         }.fillMaxWidth().height(imageHeight),
     ) {
-        Box() {
+        Box(modifier = Modifier.background(gradient)) {
             KamelImage(
                 painter
                ,
@@ -155,7 +178,7 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
                 contentScale = ContentScale.FillHeight,
                 onLoading = { progress ->
 
-                    Card(modifier = Modifier.height(400.dp).fillMaxWidth().padding(8.dp)) {
+                    Card(modifier = Modifier.size(400.dp).fillMaxWidth().padding(8.dp)) {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator(
                                 progress = progress,

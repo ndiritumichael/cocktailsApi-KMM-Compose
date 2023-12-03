@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,6 +55,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -126,9 +129,9 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
 //                        },
 //                    )
                     item {
-                        LazyHorizontalGrid(
-                            rows = GridCells.Fixed(2),
-                            modifier = Modifier.fillMaxWidth().height(250.dp).padding(horizontal = 8.dp),
+                        LazyVerticalGrid(
+                            columns = GridCells.Adaptive(100.dp),
+                            modifier = Modifier.fillMaxWidth().height(120.dp).padding(horizontal = 8.dp),
                         ) {
                             items(drink.ingredient) { ingredient ->
                                 Card(modifier = Modifier.padding(4.dp), onClick = {
@@ -256,7 +259,7 @@ fun DrinkPoster(imageLink: String, text: String) {
             asyncPainterResource(imageLink),
             modifier = Modifier.align(Alignment.Center).clip(RoundedCornerShape(10.dp))
                 .animateContentSize(spring(dampingRatio = Spring.DampingRatioMediumBouncy))
-                .fillMaxSize(if (showLargeImage) 0.7F else 0.35f).wrapContentHeight()
+                .size(if (showLargeImage) (0.75f * 400.dp) else (0.3f * 400.dp))
                 .shadow(10.dp, ambientColor = Color.Green),
             contentScale = ContentScale.FillBounds,
             contentDescription = null,
