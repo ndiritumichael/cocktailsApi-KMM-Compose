@@ -23,6 +23,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -58,8 +60,8 @@ object SearchScreen : Screen, KoinComponent {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun SearchUI() {
-        val searchtext = presenter.searchText.collectAsState().value
-        val searchUiState = presenter.searchState.collectAsState().value
+        val searchtext  by presenter.searchText.collectAsState()
+        val searchUiState by presenter.searchState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
         val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -130,6 +132,9 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
     val painter = asyncPainterResource(drink.drinkImage)
     val networkLoader = rememberNetworkLoader()
     val dominantPal = rememberDominantColorState(loader = networkLoader)
+    val clickState  = remember {
+        onClick
+    }
 
     val gradient = Brush.radialGradient(
         listOf(
@@ -142,24 +147,7 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
 
 
 
-    LaunchedEffect(painter){
-        when(painter){
-            is Resource.Failure -> {}
-            is Resource.Loading -> {}
-            is Resource.Success -> {
-                val data = painter.value
 
-                if (data is BitmapPainter){
-                    val bitmap = data
-                }
-
-                Napier.d {
-                    "The data that is held is $data"
-                }
-            }
-        }
-
-    }
 
     LaunchedEffect(painter){
        dominantPal.updateFrom (Url(drink.drinkImage))
@@ -167,7 +155,7 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
     }
     Card(
         modifier = Modifier.padding(8.dp).clickable {
-            onClick()
+           clickState()
         }.fillMaxWidth().height(imageHeight),
     ) {
         Box(modifier = Modifier.background(gradient)) {
@@ -175,10 +163,10 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
                 painter
                ,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillHeight,
+                contentScale = ContentScale.Fit,
                 onLoading = { progress ->
 
-                    Card(modifier = Modifier.size(400.dp).fillMaxWidth().padding(8.dp)) {
+                    Card(modifier = Modifier.size(imageHeight).fillMaxWidth().padding(8.dp)) {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             CircularProgressIndicator(
                                 progress = progress,

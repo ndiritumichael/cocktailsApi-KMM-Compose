@@ -119,19 +119,12 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
 
                         )
                     }
-//                    itemsIndexed(
-//                        drink.ingredient,
-//                        itemContent = { index, ingredient ->
-//                            IngredientListSection(
-//                                index + 1,
-//                                ingredient,
-//                            )
-//                        },
-//                    )
+
                     item {
-                        LazyVerticalGrid(
-                            columns = GridCells.Adaptive(100.dp),
+                        LazyHorizontalGrid(
+                            rows = GridCells.Adaptive(100.dp),
                             modifier = Modifier.fillMaxWidth().height(120.dp).padding(horizontal = 8.dp),
+                            horizontalArrangement = Arrangement.Center
                         ) {
                             items(drink.ingredient) { ingredient ->
                                 Card(modifier = Modifier.padding(4.dp), onClick = {

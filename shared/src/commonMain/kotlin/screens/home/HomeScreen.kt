@@ -134,7 +134,7 @@ object HomeScreen : Screen, KoinComponent {
                     }
                     randomDrink.drink?.let { drink ->
                         item {
-                            Box(modifier = Modifier.fillMaxWidth()) {
+                            Box() {
                                 CockTailCard(drink, imageHeight = 400.dp) {
                                     navigator.push(DrinksDetailScreen(drink.id))
                                 }

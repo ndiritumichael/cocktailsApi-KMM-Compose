@@ -109,7 +109,7 @@ kotlin {
         val jvmMain by getting {
 
             dependencies {
-
+implementation(libs.kotlinx.coroutines.swing)
                 implementation(libs.ktor.client.okhttp)
             }
         }

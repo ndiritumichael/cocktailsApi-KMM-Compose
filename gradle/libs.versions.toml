@@ -15,6 +15,7 @@ kmpalette = "2.0.3"
 kotlin_version = "1.9.10"
 koin = "3.5.0"
 koin_android_version= "3.5.0"
+kotlinxCoroutinesSwing = "1.7.3"
 ktLint = "10.3.0"
 ktorVersion = "2.3.3"
 landscapist-coil = "2.1.0"
@@ -71,6 +72,7 @@ koin-android-compose = { group = "io.insert-koin", name = "koin-androidx-compose
 
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutinesSwing" }
 ktor-client-core = { group = "io.ktor" , name = "ktor-client-core" ,version.ref = "ktorVersion"}
 ktor-client-okhttp = { group = "io.ktor" , name = "ktor-client-okhttp" ,version.ref = "ktorVersion"}
 ktor-client-darwin = { group = "io.ktor" , name = "ktor-client-darwin" ,version.ref = "ktorVersion"}
