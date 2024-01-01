@@ -1,4 +1,5 @@
 [versions]
+androidDriver = "2.0.1"
 androidxActivity = "1.8.0"
 androidxComposeBom = "2023.08.00"
 androidxComposeCompiler = "1.4.5"
@@ -28,7 +29,7 @@ kmm-paging = "3.1.1-0.1.0"
 kuurtPaging = "0.4.7"
 multiplatform-settings = "1.1.1"
 pagingCompose = "1.0.0-alpha17"
-sqlDelightVersion= "1.5.5"
+sqlDelightVersion= "2.0.1"
 
 themeMaterial3 = "0.6.0"
 voyager = "1.0.0-rc08"
@@ -37,6 +38,7 @@ org-jetbrains-kotlin-jvm = "1.9.0"
 
 
 [libraries]
+android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
@@ -88,9 +90,10 @@ kmpalette-extensions-base64 = { module = "com.kmpalette:extensions-base64", vers
 kmpalette-extensions-network = { module = "com.kmpalette:extensions-network", version.ref = "kmpalette" }
 
 
-sqldelight-runtime = { group = "com.squareup.sqldelight", name = "runtime", version.ref = "sqlDelightVersion"}
-sqldelight-android-driver= { group = "com.squareup.sqldelight", name = "android-driver", version.ref = "sqlDelightVersion"}
-sqldelight-native-driver= { group = "com.squareup.sqldelight", name = "native-driver", version.ref = "sqlDelightVersion"}
+sqldelight-runtime = { group = "app.cash.sqldelight", name = "runtime", version.ref = "sqlDelightVersion"}
+sqldelight-android-driver= { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqlDelightVersion"}
+sqldelight-native-driver= { group = "app.cash.sqldelight", name = "native-driver", version.ref = "sqlDelightVersion"}
+sqldelight-jvm-driver= { group = "app.cash.sqldelight", name = "sqlite-driver", version.ref = "sqlDelightVersion"}
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist-coil"}
 landscapist-palette = { group = "com.github.skydoves" , name  = "landscapist-palette" , version.ref = "landscapist-coil"}
 
