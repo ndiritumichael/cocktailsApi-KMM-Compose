@@ -10,6 +10,8 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(project(":shared"))
+
+                implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
             }
         }
     }
