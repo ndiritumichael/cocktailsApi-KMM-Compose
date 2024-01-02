@@ -1,6 +1,6 @@
 package di
 
-import data.preferences.SettingWrapper
+import data.database.preferences.SettingWrapper
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
