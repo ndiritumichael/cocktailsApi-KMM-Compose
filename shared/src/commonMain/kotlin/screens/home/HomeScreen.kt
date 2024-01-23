@@ -114,6 +114,26 @@ object HomeScreen : Screen, KoinComponent {
                                 }
                             }
                         }
+                    } else{
+                        randomDrink.drink?.let { drink ->
+                            item {
+                                Box() {
+                                    CockTailCard(drink, imageHeight = 400.dp) {
+                                        navigator.push(DrinksDetailScreen(drink.id))
+                                    }
+                                    Text(
+                                        "Cocktail of the Day",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        modifier = Modifier.padding(8.dp).align(
+                                            Alignment.TopCenter,
+                                        ),
+                                        fontWeight = FontWeight.ExtraBold,
+                                        color = dominantColor.onColor,
+                                    )
+                                }
+                            }
+                        }
+
                     }
 
                     item {
@@ -132,24 +152,7 @@ object HomeScreen : Screen, KoinComponent {
                             }
                         }
                     }
-                    randomDrink.drink?.let { drink ->
-                        item {
-                            Box() {
-                                CockTailCard(drink, imageHeight = 400.dp) {
-                                    navigator.push(DrinksDetailScreen(drink.id))
-                                }
-                                Text(
-                                    "Cocktail of the Day",
-                                    style = MaterialTheme.typography.titleLarge,
-                                    modifier = Modifier.padding(8.dp).align(
-                                        Alignment.TopCenter,
-                                    ),
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = dominantColor.onColor,
-                                )
-                            }
-                        }
-                    }
+
 
                     item {
                         Text(
