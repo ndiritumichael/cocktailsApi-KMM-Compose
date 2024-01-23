@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -56,6 +57,7 @@ import screens.drinkDetailsScreen.DrinksDetailScreen
 import screens.ingredientDetails.IngredientDetailScreen
 import screens.searchScreen.CockTailCard
 import screens.searchScreen.SearchScreen
+import screens.settings.SettingsScreen
 import screens.uiutils.getIngredientImage
 
 object HomeScreen : Screen, KoinComponent {
@@ -82,6 +84,12 @@ object HomeScreen : Screen, KoinComponent {
                     }) {
                         Icon(Icons.Default.Search, "search icon")
                     }
+
+                    IconButton(onClick = {
+                        navigator.push(SettingsScreen)
+                    }) {
+                        Icon(Icons.Default.Settings, "Settings screen")
+                    }
                 }, scrollBehavior = scrollBehaviour)
             },
             floatingActionButton = {
@@ -106,6 +114,26 @@ object HomeScreen : Screen, KoinComponent {
                                 }
                             }
                         }
+                    } else{
+                        randomDrink.drink?.let { drink ->
+                            item {
+                                Box() {
+                                    CockTailCard(drink, imageHeight = 400.dp) {
+                                        navigator.push(DrinksDetailScreen(drink.id))
+                                    }
+                                    Text(
+                                        "Cocktail of the Day",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        modifier = Modifier.padding(8.dp).align(
+                                            Alignment.TopCenter,
+                                        ),
+                                        fontWeight = FontWeight.ExtraBold,
+                                        color = dominantColor.onColor,
+                                    )
+                                }
+                            }
+                        }
+
                     }
 
                     item {
@@ -124,24 +152,7 @@ object HomeScreen : Screen, KoinComponent {
                             }
                         }
                     }
-                    randomDrink.drink?.let { drink ->
-                        item {
-                            Box(modifier = Modifier.fillMaxWidth()) {
-                                CockTailCard(drink, imageHeight = 400.dp) {
-                                    navigator.push(DrinksDetailScreen(drink.id))
-                                }
-                                Text(
-                                    "Cocktail of the Day",
-                                    style = MaterialTheme.typography.titleLarge,
-                                    modifier = Modifier.padding(8.dp).align(
-                                        Alignment.TopCenter,
-                                    ),
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = dominantColor.onColor,
-                                )
-                            }
-                        }
-                    }
+
 
                     item {
                         Text(

@@ -1,5 +1,8 @@
 package domain.models
 
+import kotlinx.serialization.Serializable
+
+
 data class DrinkDetailModel(
     val id: String,
     val name: String,
@@ -14,6 +17,8 @@ data class DrinkIngredientsModel(
     val name: String,
     val measurements: String,
 )
+
+@Serializable
 data class DrinkInstructionLanguages(
     val language: String,
     val instruction: String,

@@ -1,8 +1,9 @@
 package di
 
-import data.network.apiClient
+import data.database.dao.CocktailsDao
 import data.networksource.CocktailService
 import data.networksource.SearchService
+import data.networksource.network.apiClient
 import domain.repository.IngredientsSourceImpl
 import domain.sources.HomeDrinksRepository
 import domain.sources.HomeScreenSource
@@ -14,13 +15,14 @@ import io.github.aakira.napier.Napier
 import org.koin.core.Koin
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import presentation.DrinksSearchPresenter
 import presentation.HomeScreenPresenter
 import screens.ingredientDetails.IngredientDrinkPresenter
 
-fun initKoin(enableNetworkLogs: Boolean) = startKoin {
-    modules(commonModules)
+fun initKoin(enableNetworkLogs: Boolean, platformModules: Module = module { }) = startKoin {
+    modules(commonModules, sourceSetModules, platformModules)
 }.also {
     Napier.base(DebugAntilog())
 }
@@ -32,8 +34,11 @@ val Koin.drinkPresenter: DrinksSearchPresenter
     get() = get()
 
 val commonModules = module {
-
     single {
+        CocktailsDao(get())
+    }
+
+    factory {
         IngredientDrinkPresenter(get())
     }
     single {

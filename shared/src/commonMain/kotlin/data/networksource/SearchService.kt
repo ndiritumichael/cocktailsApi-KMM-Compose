@@ -1,8 +1,8 @@
 package data.networksource
 
-import data.network.UrlRoutes
-import data.network.dto.drinkDto.DrinkDTOItem
-import data.network.networkutils.BaseApiResponse
+import data.networksource.network.UrlRoutes
+import data.networksource.network.dto.drinkDto.DrinkDTOItem
+import data.networksource.network.networkutils.BaseApiResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter

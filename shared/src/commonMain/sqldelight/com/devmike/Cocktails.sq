@@ -1,0 +1,93 @@
+
+
+
+-- Define the table for DrinkDetailModel
+CREATE TABLE DrinkDetailModel (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    isAlcoholic INTEGER,
+    drinkImage TEXT NOT NULL,
+    instructions TEXT NOT NULL
+);
+
+-- Define the table for DrinkIngredientsModel
+CREATE TABLE DrinkIngredientsModel (
+
+    name TEXT NOT NULL PRIMARY KEY,
+    measurements TEXT NOT NULL
+);
+
+-- Define the table for the relationship between drinks and ingredients
+CREATE TABLE DrinkIngredientRelation (
+    drinkId TEXT REFERENCES DrinkDetailModel(id),
+    ingredientname TEXT REFERENCES DrinkIngredientsModel(name),
+    PRIMARY KEY (drinkId, ingredientname)
+);
+
+
+
+getAllDrinks:
+SELECT
+    DrinkDetailModel.id AS drinkId,
+    DrinkDetailModel.name AS drinkName,
+    DrinkDetailModel.isAlcoholic,
+    DrinkDetailModel.drinkImage,
+    DrinkIngredientsModel.name AS ingredientName,
+    DrinkIngredientsModel.measurements,
+    instructions
+FROM
+    DrinkDetailModel
+LEFT JOIN
+    DrinkIngredientRelation ON DrinkDetailModel.id = DrinkIngredientRelation.drinkId
+LEFT JOIN
+    DrinkIngredientsModel ON DrinkIngredientRelation.ingredientname = DrinkIngredientsModel.name
+;
+
+
+
+
+-- Insert data into DrinkDetailModel
+insertDrink:
+INSERT INTO DrinkDetailModel (id, name, isAlcoholic, drinkImage,instructions)
+VALUES (?, ?,? , ?,?);
+
+-- Insert data into DrinkIngredientsModel
+insertIngredient:
+INSERT INTO DrinkIngredientsModel ( name, measurements)
+VALUES (?,?);
+
+-- Insert data into DrinkIngredientRelation to associate the ingredient with a drink
+insertIngredientRelation:
+INSERT INTO DrinkIngredientRelation (drinkId, ingredientname)
+VALUES (?,?);
+
+
+
+
+
+
+-- Delete from DrinkDetailModel
+deleteDrink:
+DELETE FROM DrinkDetailModel
+WHERE id = ?;
+
+-- Delete from DrinkIngredientRelation (assuming you have a foreign key relationship)
+deleteDrinkRelation:
+DELETE FROM DrinkIngredientRelation
+WHERE drinkId = ?;
+
+-- Delete from DrinkIngredientsModel (if needed)
+-- Note: Be cautious about deleting ingredients that might be shared among multiple drinks
+-- Only delete if an ingredient is specific to the drink being deleted
+-- DELETE FROM DrinkIngredientsModel WHERE id = 'your_ingredient_id';
+
+
+deleteUnusedIngredient:
+-- Delete ingredients that are not used by any other drinks
+DELETE FROM DrinkIngredientsModel
+WHERE name IN (
+    SELECT DISTINCT di.ingredientname
+    FROM DrinkIngredientRelation di
+    LEFT JOIN DrinkIngredientRelation di2 ON di.ingredientname = di2.ingredientname AND di.drinkId != di2.drinkId
+    WHERE di2.drinkId IS NULL
+);
