@@ -1,5 +1,6 @@
 package di
 
+import data.database.dao.CocktailsDao
 import data.networksource.CocktailService
 import data.networksource.SearchService
 import data.networksource.network.apiClient
@@ -33,6 +34,9 @@ val Koin.drinkPresenter: DrinksSearchPresenter
     get() = get()
 
 val commonModules = module {
+    single {
+        CocktailsDao(get())
+    }
 
     factory {
         IngredientDrinkPresenter(get())
