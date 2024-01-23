@@ -19,7 +19,6 @@ import org.koin.core.component.KoinComponent
 
 class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinComponent,ScreenModel {
 
-    private val coroutineScope: CoroutineScope = screenModelScope
     private var job: Job? = null
     private var detailJob: Job? = null
 
@@ -44,7 +43,7 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
 
         _drinkDetailState.value = DetailScreenState(isLoading = true)
         detailJob?.cancel()
-        detailJob = coroutineScope.launch {
+        detailJob = screenModelScope.launch {
             val data = repository.getDrinkDetails(id)
             data.onSuccess {
                 _drinkDetailState.value = DetailScreenState(data = it)
@@ -61,7 +60,7 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
         if (search.length < 3) {
             SearchScreenState(isLoading = false)
         } else {
-            job = coroutineScope.launch {
+            job =screenModelScope.launch {
                 delay(500)
                 val data = repository.searchDrinkByName(search)
 
