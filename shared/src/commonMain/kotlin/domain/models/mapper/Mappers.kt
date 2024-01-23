@@ -66,5 +66,5 @@ fun CategoryDrinkDTO.toDrinkModel():DrinkModel{
 }
 
 fun String.addNewLine(): String {
-    return "-" + this.replace(". ", ".\n\n-")
+    return  "-"+ this.replace(". ", ".\n-")
 }

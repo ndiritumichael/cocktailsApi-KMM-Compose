@@ -3,6 +3,7 @@ package screens.searchScreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -29,7 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BitmapPainter
+
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -41,10 +43,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.kmpalette.loader.rememberNetworkLoader
 import com.kmpalette.rememberDominantColorState
-import com.kmpalette.rememberPaletteState
+
 import domain.models.DrinkModel
-import io.github.aakira.napier.Napier
-import io.kamel.core.Resource
+
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -158,21 +159,25 @@ fun CockTailCard(drink: DrinkModel, imageHeight: Dp = 200.dp, onClick: () -> Uni
            clickState()
         }.fillMaxWidth().height(imageHeight),
     ) {
-        Box(modifier = Modifier.background(gradient)) {
+        Box {
             KamelImage(
                 painter
                ,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(imageHeight),
+                contentScale = ContentScale.FillBounds,
                 onLoading = { progress ->
 
                     Card(modifier = Modifier.size(imageHeight).fillMaxWidth().padding(8.dp)) {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator(
+                        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+
+
+                            LinearProgressIndicator(
                                 progress = progress,
-                                modifier = Modifier.align(Alignment.Center),
+
                                 color = Color.Magenta,
                             )
+
+                            Text("loading...${(progress *100).toInt()}%")
                         }
                     }
 //                    Box(
