@@ -72,8 +72,8 @@ koin-test = { group = "io.insert-koin", name = "koin-test" , version.ref = "koin
 koin-android = { group = "io.insert-koin", name = "koin-android" , version.ref = "koin_android_version"}
 koin-android-compose = { group = "io.insert-koin", name = "koin-androidx-compose" , version.ref = "koin_android_version"}
 
-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutinesSwing" }
 ktor-client-core = { group = "io.ktor" , name = "ktor-client-core" ,version.ref = "ktorVersion"}
 ktor-client-okhttp = { group = "io.ktor" , name = "ktor-client-okhttp" ,version.ref = "ktorVersion"}
@@ -94,6 +94,8 @@ sqldelight-runtime = { group = "app.cash.sqldelight", name = "runtime", version.
 sqldelight-android-driver= { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqlDelightVersion"}
 sqldelight-native-driver= { group = "app.cash.sqldelight", name = "native-driver", version.ref = "sqlDelightVersion"}
 sqldelight-jvm-driver= { group = "app.cash.sqldelight", name = "sqlite-driver", version.ref = "sqlDelightVersion"}
+sqldelight-coroutine = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelightVersion" }
+
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist-coil"}
 landscapist-palette = { group = "com.github.skydoves" , name  = "landscapist-palette" , version.ref = "landscapist-coil"}
 

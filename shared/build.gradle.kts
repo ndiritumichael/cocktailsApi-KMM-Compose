@@ -69,7 +69,10 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 api(libs.logger.napier)
 
-                implementation(libs.sqldelight.runtime)
+             //   implementation(libs.sqldelight.runtime)
+                implementation(libs.sqldelight.coroutine)
+
+
                 implementation(libs.multiplatform.settings)
                 implementation(libs.multiplatform.settings.coroutines)
 
@@ -138,7 +141,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlin {
-        jvmToolchain(11)
+        jvmToolchain(17)
     }
 }
 
@@ -146,6 +149,7 @@ sqldelight {
     databases {
         create("Database") {
             packageName.set("com.devmike")
+            srcDirs.setFrom("src/commonMain/sqldelight")
         }
     }
 }
