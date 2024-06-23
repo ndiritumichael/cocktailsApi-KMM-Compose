@@ -105,6 +105,7 @@ fun CustomTab(
     modifier: Modifier = Modifier,
     tabWidth: Dp = 100.dp,
     alignment: Alignment = Alignment.Center,
+    indicatorColor: Color = MaterialTheme.colorScheme.primary,
     onClick: (index: Int) -> Unit,
 ) {
     val indicatorOffset: Dp by animateDpAsState(
@@ -114,7 +115,7 @@ fun CustomTab(
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = alignment) {
         Box(
             modifier = modifier
-                .clip(CircleShape)
+                .clip(RoundedCornerShape(16.dp))
                 .background(White)
                 .height(intrinsicSize = IntrinsicSize.Min)
                 .padding(4.dp),
@@ -123,7 +124,7 @@ fun CustomTab(
             MyTabIndicator(
                 indicatorWidth = tabWidth,
                 indicatorOffset = indicatorOffset,
-                indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                indicatorColor = indicatorColor.copy(alpha = 0.3f),
             )
             Row(
                 horizontalArrangement = Arrangement.Center,

@@ -6,10 +6,12 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +23,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,12 +56,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.kmpalette.loader.rememberNetworkLoader
+import com.kmpalette.rememberDominantColorState
+import com.kmpalette.rememberPaletteState
 import domain.models.DrinkIngredientsModel
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import io.ktor.http.Url
 import kotlinx.coroutines.delay
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -81,9 +89,20 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
             presenter.getDrinkDetails(drinkId)
             // presenter.
         }
+        var dominantColor by remember { mutableStateOf<Color>(Color.LightGray)}
+
+        val detailsGradient = Brush.verticalGradient(
+            listOf(
+                Color.Transparent,
+                dominantColor.copy(alpha = 0.5f),
+                dominantColor.copy(alpha = 0.25f),
+
+
+            ),
+        )
         Scaffold { paddingValues ->
             Box(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                modifier = Modifier.fillMaxSize().padding(paddingValues).background(detailsGradient),
                 contentAlignment = Alignment.TopCenter,
             ) {
                 AnimatedVisibility(
@@ -105,7 +124,10 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
 
                 LazyColumn {
                     item {
-                        DrinkPoster(drink.drinkImage, drink.name)
+                        DrinkPoster(drink.drinkImage, drink.name){
+                            dominantColor = it
+
+                        }
                     }
                     stickyHeader {
                         Text(
@@ -116,19 +138,12 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
 
                         )
                     }
-//                    itemsIndexed(
-//                        drink.ingredient,
-//                        itemContent = { index, ingredient ->
-//                            IngredientListSection(
-//                                index + 1,
-//                                ingredient,
-//                            )
-//                        },
-//                    )
+
                     item {
                         LazyHorizontalGrid(
-                            rows = GridCells.Fixed(2),
-                            modifier = Modifier.fillMaxWidth().height(250.dp).padding(horizontal = 8.dp),
+                            rows = GridCells.Adaptive(100.dp),
+                            modifier = Modifier.fillMaxWidth().height(120.dp).padding(horizontal = 8.dp),
+                            horizontalArrangement = Arrangement.Center
                         ) {
                             items(drink.ingredient) { ingredient ->
                                 Card(modifier = Modifier.padding(4.dp), onClick = {
@@ -190,12 +205,13 @@ data class DrinksDetailScreen(val drinkId: String) : Screen, KoinComponent {
                             CustomTab(
                                 selectedItemIndex = selectedLanguageIndex,
                                 items = drink.instructions.map { it.language },
+                                indicatorColor = dominantColor,
                                 onClick = { index ->
                                     selectedLanguageIndex = index
                                 },
                             )
 
-                            Text(drink.instructions[selectedLanguageIndex].instruction)
+                            Text(drink.instructions[selectedLanguageIndex].instruction,modifier = Modifier.padding(horizontal = 16.dp))
                         }
                     }
                 }
@@ -229,13 +245,19 @@ fun IngredientListSection(index: Int, ingredients: DrinkIngredientsModel) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun DrinkPoster(imageLink: String, text: String) {
+fun DrinkPoster(imageLink: String, text: String,onDominantColorChange : (Color) -> Unit = {}) {
+
+    val networkLoader = rememberNetworkLoader()
+    val dominantPal = rememberDominantColorState(loader = networkLoader)
+    val colorSwatch = rememberPaletteState(networkLoader)
+
     val gradient = Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
     var showLargeImage by remember {
         mutableStateOf(true)
     }
-
+    val changeColor = remember { onDominantColorChange }
     Box(
         modifier = Modifier.fillMaxWidth()
             .height(400.dp),
@@ -256,7 +278,7 @@ fun DrinkPoster(imageLink: String, text: String) {
             asyncPainterResource(imageLink),
             modifier = Modifier.align(Alignment.Center).clip(RoundedCornerShape(10.dp))
                 .animateContentSize(spring(dampingRatio = Spring.DampingRatioMediumBouncy))
-                .fillMaxSize(if (showLargeImage) 0.7F else 0.35f).wrapContentHeight()
+                .size(if (showLargeImage) (0.75f * 400.dp) else (0.3f * 400.dp))
                 .shadow(10.dp, ambientColor = Color.Green),
             contentScale = ContentScale.FillBounds,
             contentDescription = null,
@@ -272,7 +294,7 @@ fun DrinkPoster(imageLink: String, text: String) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(8.dp).align(
                     Alignment.BottomCenter,
-                ),
+                ).basicMarquee(),
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
@@ -283,4 +305,14 @@ fun DrinkPoster(imageLink: String, text: String) {
         delay(500)
         showLargeImage = true
     }
+
+     LaunchedEffect(imageLink) {
+        dominantPal.updateFrom(io.ktor.http.Url(imageLink))
+        // colorSwatch.generate(Url(imageLink))
+    }
+    LaunchedEffect(dominantPal.color) {
+        changeColor(dominantPal.color)
+    }
+
+
 }

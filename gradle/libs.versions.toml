@@ -1,4 +1,5 @@
 [versions]
+androidDriver = "2.0.1"
 androidxActivity = "1.8.0"
 androidxComposeBom = "2023.08.00"
 androidxComposeCompiler = "1.4.5"
@@ -15,25 +16,29 @@ kmpalette = "2.0.3"
 kotlin_version = "1.9.10"
 koin = "3.5.0"
 koin_android_version= "3.5.0"
+kotlinxCoroutinesSwing = "1.7.3"
 ktLint = "10.3.0"
 ktorVersion = "2.3.3"
 landscapist-coil = "2.1.0"
 lifecycle-runtime = "2.6.1"
+
 napierVersion = "2.6.1"
 kotlinxCoroutines = "1.7.3"
 kotlinxSerialization = "1.5.1"
 kmm-paging = "3.1.1-0.1.0"
 kuurtPaging = "0.4.7"
-multiplatform-settings = "1.0.0"
+multiplatform-settings = "1.1.1"
 pagingCompose = "1.0.0-alpha17"
-sqlDelightVersion= "1.5.5"
+sqlDelightVersion= "2.0.1"
 
+themeMaterial3 = "0.6.0"
 voyager = "1.0.0-rc08"
 org-jetbrains-kotlin-jvm = "1.9.0"
 
 
 
 [libraries]
+android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
@@ -67,8 +72,9 @@ koin-test = { group = "io.insert-koin", name = "koin-test" , version.ref = "koin
 koin-android = { group = "io.insert-koin", name = "koin-android" , version.ref = "koin_android_version"}
 koin-android-compose = { group = "io.insert-koin", name = "koin-androidx-compose" , version.ref = "koin_android_version"}
 
-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutinesSwing" }
 ktor-client-core = { group = "io.ktor" , name = "ktor-client-core" ,version.ref = "ktorVersion"}
 ktor-client-okhttp = { group = "io.ktor" , name = "ktor-client-okhttp" ,version.ref = "ktorVersion"}
 ktor-client-darwin = { group = "io.ktor" , name = "ktor-client-darwin" ,version.ref = "ktorVersion"}
@@ -83,9 +89,13 @@ kmpalette-core = { module = "com.kmpalette:kmpalette-core", version.ref = "kmpal
 kmpalette-extensions-base64 = { module = "com.kmpalette:extensions-base64", version.ref = "kmpalette" }
 kmpalette-extensions-network = { module = "com.kmpalette:extensions-network", version.ref = "kmpalette" }
 
-sqldelight-runtime = { group = "com.squareup.sqldelight", name = "runtime", version.ref = "sqlDelightVersion"}
-sqldelight-android-driver= { group = "com.squareup.sqldelight", name = "android-driver", version.ref = "sqlDelightVersion"}
-sqldelight-native-driver= { group = "com.squareup.sqldelight", name = "native-driver", version.ref = "sqlDelightVersion"}
+
+sqldelight-runtime = { group = "app.cash.sqldelight", name = "runtime", version.ref = "sqlDelightVersion"}
+sqldelight-android-driver= { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqlDelightVersion"}
+sqldelight-native-driver= { group = "app.cash.sqldelight", name = "native-driver", version.ref = "sqlDelightVersion"}
+sqldelight-jvm-driver= { group = "app.cash.sqldelight", name = "sqlite-driver", version.ref = "sqlDelightVersion"}
+sqldelight-coroutine = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelightVersion" }
+
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist-coil"}
 landscapist-palette = { group = "com.github.skydoves" , name  = "landscapist-palette" , version.ref = "landscapist-coil"}
 
@@ -95,6 +105,7 @@ multiplatform-paging = { group = "io.github.kuuuurt", name  = "multiplatform-pag
 multiplatform-settings = { group = "com.russhwolf" , name = "multiplatform-settings" , version.ref = "multiplatform-settings"}
 multiplatform-settings-coroutines = { group = "com.russhwolf" , name = "multiplatform-settings-coroutines" , version.ref = "multiplatform-settings"}
 
+theme-material3 = { module = "io.github.softartdev:theme-material3", version.ref = "themeMaterial3" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }

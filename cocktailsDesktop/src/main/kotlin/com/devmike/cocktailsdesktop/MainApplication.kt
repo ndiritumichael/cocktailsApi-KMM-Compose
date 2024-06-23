@@ -12,7 +12,7 @@ fun main() {
     koin = initKoin(enableNetworkLogs = true).koin
 
     return application {
-        Window(onCloseRequest = ::exitApplication) {
+        Window(onCloseRequest = ::exitApplication, title = "Cocktails KMP",) {
             MainWindow(applicationScope = this@application)
         }
     }

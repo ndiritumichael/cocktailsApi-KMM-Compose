@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.compose")
     kotlin("plugin.serialization")
+    id("app.cash.sqldelight") version "2.0.1"
 }
 
 kotlin {
@@ -46,6 +47,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+
+                implementation(libs.multiplatform.settings)
                 implementation(libs.kamel.image)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -53,6 +56,8 @@ kotlin {
 
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+             //   implementation(libs.theme.material3)
 
                 implementation(libs.voyager.navigator)
 
@@ -64,7 +69,10 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 api(libs.logger.napier)
 
-                implementation(libs.sqldelight.runtime)
+             //   implementation(libs.sqldelight.runtime)
+                implementation(libs.sqldelight.coroutine)
+
+
                 implementation(libs.multiplatform.settings)
                 implementation(libs.multiplatform.settings.coroutines)
 
@@ -86,6 +94,7 @@ kotlin {
 
                 api(libs.koin.android)
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.sqldelight.android.driver)
             }
         }
         val iosX64Main by getting
@@ -105,8 +114,10 @@ kotlin {
 
         val jvmMain by getting {
 
-            dependencies {
 
+            dependencies {
+                implementation(libs.sqldelight.jvm.driver)
+implementation(libs.kotlinx.coroutines.swing)
                 implementation(libs.ktor.client.okhttp)
             }
         }
@@ -130,6 +141,17 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlin {
-        jvmToolchain(11)
+        jvmToolchain(17)
     }
 }
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.devmike")
+            srcDirs.setFrom("src/commonMain/sqldelight")
+        }
+    }
+}
+
+

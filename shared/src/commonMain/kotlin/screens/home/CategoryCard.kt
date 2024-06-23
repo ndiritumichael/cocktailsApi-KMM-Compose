@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +41,7 @@ fun CategoryCard(name: String, color: Color, onCategoryClicked: () -> Unit) {
             Text(name, modifier = Modifier.align(Alignment.Center), fontWeight = FontWeight.ExtraBold)
 
             Image(
-                imageVector = Icons.Default.Settings,
+                painter = painterResource("cocktailsvg.xml"),
                 null,
                 colorFilter = ColorFilter.tint(color),
                 modifier = Modifier.size(50.dp).align(Alignment.BottomEnd).padding(bottom = 10.dp, end = 10.dp),

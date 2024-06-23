@@ -1,10 +1,13 @@
 package presentation
 
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import domain.models.DrinkDetailModel
 import domain.models.DrinkModel
 import domain.sources.SearchDrinksSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,9 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
-class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinComponent {
+class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinComponent,ScreenModel {
 
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
     private var job: Job? = null
     private var detailJob: Job? = null
 
@@ -35,9 +37,13 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
         get() = _drinkDetailState.asStateFlow()
 
     fun getDrinkDetails(id: String) {
+
+
+
+
         _drinkDetailState.value = DetailScreenState(isLoading = true)
         detailJob?.cancel()
-        detailJob = coroutineScope.launch {
+        detailJob = screenModelScope.launch {
             val data = repository.getDrinkDetails(id)
             data.onSuccess {
                 _drinkDetailState.value = DetailScreenState(data = it)
@@ -54,7 +60,7 @@ class DrinksSearchPresenter(private val repository: SearchDrinksSource) : KoinCo
         if (search.length < 3) {
             SearchScreenState(isLoading = false)
         } else {
-            job = coroutineScope.launch {
+            job =screenModelScope.launch {
                 delay(500)
                 val data = repository.searchDrinkByName(search)
 
